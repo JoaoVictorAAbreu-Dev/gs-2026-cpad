@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/theme/themes.dart';
+import '../features/notifications/band_notification_effect.dart';
 import '../features/settings/settings_controller.dart';
 import 'router.dart';
 
@@ -13,6 +14,8 @@ class PulsoApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final settings = ref.watch(settingsProvider);
+    // Mantém o efeito de notificação ativo enquanto o app está aberto.
+    ref.watch(bandNotificationEffectProvider);
     final manualHighContrast = settings.themeMode == PulsoThemeMode.highContrast;
 
     return MaterialApp.router(

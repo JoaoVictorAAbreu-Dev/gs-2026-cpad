@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Aviso de mudança de faixa (Android 13+ pede permissão em tempo de execução). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!-- Mapa base do OpenStreetMap e Open-Meteo. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="pulso"
+        android:label="PULSO"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

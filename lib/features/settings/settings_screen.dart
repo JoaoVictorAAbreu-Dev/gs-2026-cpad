@@ -6,7 +6,10 @@ import '../../app/router.dart';
 import '../../core/theme/pulso_colors.dart';
 import '../../core/theme/themes.dart';
 import '../../core/theme/tokens.dart';
+import '../notifications/band_notification_policy.dart';
+import '../notifications/notification_service.dart';
 import '../reports/data/reports_controller.dart';
+import '../reservoir/domain/operating_band.dart';
 import 'settings_controller.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -78,6 +81,32 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
           ),
+          header('Notificações'),
+          Card(
+            child: Column(
+              children: [
+                SwitchListTile(
+                  title: const Text('Avisar quando a faixa mudar'),
+                  subtitle: const Text(
+                    'Notificação do sistema, uma vez por mudança. Verificada ao abrir o app e ao atualizar os dados.',
+                  ),
+                  value: s.notifyBandChange,
+                  onChanged: (on) => _toggleNotifications(context, ref, on),
+                ),
+                ListTile(
+                  title: const Text('Enviar notificação de teste'),
+                  subtitle: const Text('Para conferir se o aparelho mostra os avisos.'),
+                  trailing: const Icon(Icons.notifications_active_outlined),
+                  enabled: s.notifyBandChange,
+                  onTap: () => ref.read(notificationServiceProvider).show(
+                        id: 99,
+                        title: 'Teste · ${BandNotificationPolicy.title(OperatingBand.alert, OperatingBand.restriction)}',
+                        body: 'Exemplo do aviso que o PULSO envia quando o Cantareira muda de faixa.',
+                      ),
+                ),
+              ],
+            ),
+          ),
           header('Acessibilidade e privacidade'),
           Card(
             child: Column(
@@ -131,6 +160,23 @@ class SettingsScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _toggleNotifications(BuildContext context, WidgetRef ref, bool on) async {
+    final ctrl = ref.read(settingsProvider.notifier);
+    if (!on) {
+      await ctrl.setNotifyBandChange(false);
+      return;
+    }
+    final granted = await ref.read(notificationServiceProvider).requestPermission();
+    await ctrl.setNotifyBandChange(granted);
+    if (!granted && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Permissão negada. Libere as notificações do PULSO nas configurações do aparelho.'),
+        ),
+      );
+    }
   }
 
   Future<void> _confirmErase(BuildContext context, WidgetRef ref) async {
