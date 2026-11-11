@@ -58,7 +58,7 @@ void main() {
           'settings.theme': scenario.theme,
         },
       );
-      final alerts = container.read(alertsProvider).requireValue;
+      final alerts = container.read(alertsProvider).value!;
       expect(alerts, isNotEmpty);
       container.read(routerProvider).go('/alertas/${alerts.first.id}');
       await tester.pumpAndSettle();
