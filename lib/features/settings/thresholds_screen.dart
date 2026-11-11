@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
@@ -48,7 +50,13 @@ class _ThresholdsScreenState extends ConsumerState<ThresholdsScreen> {
 
   Future<void> _save() async {
     if (!_form.currentState!.validate()) {
-      SemanticsService.announce('Há campos com erro. Revise antes de salvar.', TextDirection.ltr);
+      unawaited(
+        SemanticsService.sendAnnouncement(
+          View.of(context),
+          'Há campos com erro. Revise antes de salvar.',
+          TextDirection.ltr,
+        ),
+      );
       return;
     }
     final t = AlertThresholds(

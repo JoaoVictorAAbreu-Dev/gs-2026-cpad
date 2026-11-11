@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
@@ -62,7 +64,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
     if (error != null) {
       setState(() => _stepError = error);
       HapticFeedback.mediumImpact();
-      SemanticsService.announce(error, TextDirection.ltr);
+      unawaited(SemanticsService.sendAnnouncement(View.of(context), error, TextDirection.ltr));
       if (_step == 2) _descriptionFocus.requestFocus();
       return;
     }

@@ -60,7 +60,7 @@ class ReportSuccessScreen extends ConsumerWidget {
           ),
           if (!sent) ...[
             const SizedBox(height: PulsoSpacing.md),
-            InfoBanner(
+            const InfoBanner(
               icon: Icons.cloud_off_outlined,
               title: 'Sem internet agora',
               message: 'O envio acontece quando a conexão voltar. Você pode tentar em Meus registros.',
