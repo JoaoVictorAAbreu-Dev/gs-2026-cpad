@@ -13,7 +13,13 @@ class Region {
     required this.previousWeek,
     required this.population10k,
     required this.synthetic,
+    this.lat,
+    this.lon,
   });
+
+  /// Ponto central aproximado da região (para o mapa base). `null` em pacotes antigos.
+  final double? lat;
+  final double? lon;
 
   final String id;
   final String name;
@@ -48,6 +54,8 @@ class Region {
         previousWeek: (j['previousWeek'] as num).toInt(),
         population10k: (j['population10k'] as num?)?.toDouble() ?? 0,
         synthetic: (j['origin'] as String?) != 'real',
+        lat: (j['lat'] as num?)?.toDouble(),
+        lon: (j['lon'] as num?)?.toDouble(),
       );
 }
 

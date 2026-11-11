@@ -41,4 +41,22 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('A faixa mudou desde sua última visita'), findsNothing);
   });
+
+  testWidgets('com a preferência ligada, a mudança de faixa gera uma notificação do sistema (uma vez)', (tester) async {
+    final fake = FakeNotificationService();
+    await pumpApp(
+      tester,
+      notifications: fake,
+      prefs: {'consent.version': 1, 'band.lastSeen': 'restriction', 'settings.notifyBandChange': true},
+    );
+    expect(fake.shown, hasLength(1));
+    expect(fake.shown.single.title, 'Cantareira melhorou de faixa: Restrição → Atenção');
+    expect(fake.shown.single.body, startsWith('Volume útil em 52,9%'));
+  });
+
+  testWidgets('com a preferência desligada, não notifica', (tester) async {
+    final fake = FakeNotificationService();
+    await pumpApp(tester, notifications: fake, prefs: {'consent.version': 1, 'band.lastSeen': 'restriction'});
+    expect(fake.shown, isEmpty);
+  });
 }

@@ -6,10 +6,13 @@ plugins {
 
 android {
     namespace = "br.com.fiap.pulso.pulso"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_local_notifications 23 exige compileSdk 37 ou maior.
+    compileSdk = maxOf(37, flutter.compileSdkVersion)
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // Desugaring exigido pelo flutter_local_notifications (APIs de data em Androids antigos).
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -46,4 +49,8 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

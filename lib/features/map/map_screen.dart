@@ -14,7 +14,11 @@ import '../../shared/widgets/badges.dart';
 import '../../shared/widgets/feedback.dart';
 import '../alerts/domain/alert.dart';
 import '../reservoir/data/territory_data.dart';
+import 'osm_map.dart';
 import 'region_risk.dart';
+
+/// Três formas de ver o território: mapa real (OSM), cartograma (offline) e lista (leitor de tela).
+enum MapView { osm, cartogram, list }
 
 /// Cartograma: cada hexágono é uma região, fora de escala. Cor + ícone + texto (nunca só cor).
 class MapScreen extends ConsumerStatefulWidget {
@@ -26,7 +30,7 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends ConsumerState<MapScreen> {
   bool _forecast = false;
-  bool _asList = false;
+  MapView _view = MapView.osm;
 
   @override
   Widget build(BuildContext context) {
@@ -83,27 +87,40 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 ],
               ),
               const SizedBox(height: PulsoSpacing.md),
-              if (_asList)
-                _RegionList(regions: regions, severityOf: sev, onTap: (r) => _openRegion(r, sev(r)))
-              else
-                _HexCartogram(regions: regions, severityOf: sev, onTap: (r) => _openRegion(r, sev(r))),
-              const SizedBox(height: PulsoSpacing.sm),
-              Align(
-                alignment: Alignment.centerRight,
-                child: OutlinedButton.icon(
-                  style: OutlinedButton.styleFrom(minimumSize: const Size(0, kMinTouchTarget)),
-                  onPressed: () => setState(() => _asList = !_asList),
-                  icon: Icon(_asList ? Icons.hexagon_outlined : Icons.list),
-                  label: Text(_asList ? 'Ver mapa' : 'Ver lista'),
+              Semantics(
+                label: 'Forma de visualização',
+                child: SegmentedButton<MapView>(
+                  segments: const [
+                    ButtonSegment(value: MapView.osm, icon: Icon(Icons.map_outlined), label: Text('Mapa')),
+                    ButtonSegment(value: MapView.cartogram, icon: Icon(Icons.hexagon_outlined), label: Text('Cartograma')),
+                    ButtonSegment(value: MapView.list, icon: Icon(Icons.list), label: Text('Lista')),
+                  ],
+                  selected: {_view},
+                  showSelectedIcon: false,
+                  onSelectionChanged: (v) => setState(() => _view = v.first),
                 ),
               ),
+              const SizedBox(height: PulsoSpacing.md),
+              switch (_view) {
+                MapView.osm => OsmTerritoryMap(regions: regions, severityOf: sev, onTap: (r) => _openRegion(r, sev(r))),
+                MapView.cartogram =>
+                  _HexCartogram(regions: regions, severityOf: sev, onTap: (r) => _openRegion(r, sev(r))),
+                MapView.list => _RegionList(regions: regions, severityOf: sev, onTap: (r) => _openRegion(r, sev(r))),
+              },
               const SizedBox(height: PulsoSpacing.sm),
               Text(
-                _forecast
-                    ? '+7 dias: cada região repete a variação de registros da última semana. '
-                        'Cartograma fora de escala; cores das regiões em cenário sintético de demonstração.'
-                    : 'Cartograma: cada hexágono é uma região, fora de escala. Risco pelos registros '
-                        'dos últimos 7 dias (≥ ${RegionRisk.highFrom} alto, ≥ ${RegionRisk.moderateFrom} moderado).',
+                [
+                  switch (_view) {
+                    MapView.osm => 'Mapa base © OpenStreetMap (requer internet; sem conexão, use o cartograma). '
+                        'Gotas azuis: represas do Cantareira. Círculos: ponto central aproximado de cada região.',
+                    MapView.cartogram => 'Cartograma: cada hexágono é uma região, fora de escala. Funciona sem internet.',
+                    MapView.list => 'Lista ordenada pelo risco, indicada para leitores de tela.',
+                  },
+                  _forecast
+                      ? '+7 dias: cada região repete a variação de registros da última semana.'
+                      : 'Risco pelos registros dos últimos 7 dias '
+                          '(≥ ${RegionRisk.highFrom} alto, ≥ ${RegionRisk.moderateFrom} moderado).',
+                ].join(' '),
                 style: text.bodyMedium?.copyWith(color: context.pulso.muted),
               ),
             ],
