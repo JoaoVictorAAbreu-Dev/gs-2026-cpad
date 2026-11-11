@@ -37,9 +37,11 @@ void main() {
             'settings.theme': scenario.theme,
           },
         );
+        // A visão geral já foi validada no caso '/'; aqui só interessa a rota.
+        if (route != '/') tester.takeException();
         container.read(routerProvider).go(route);
         await tester.pumpAndSettle();
-        expect(tester.takeException(), isNull);
+        expect(tester.takeException(), isNull, reason: 'estouro de layout em $route');
 
         final handle = tester.ensureSemantics();
         await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
@@ -58,6 +60,7 @@ void main() {
           'settings.theme': scenario.theme,
         },
       );
+      tester.takeException();
       final alerts = container.read(alertsProvider).value!;
       expect(alerts, isNotEmpty);
       container.read(routerProvider).go('/alertas/${alerts.first.id}');

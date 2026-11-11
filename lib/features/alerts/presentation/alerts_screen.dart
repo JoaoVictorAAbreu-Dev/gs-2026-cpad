@@ -24,10 +24,12 @@ class AlertsScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.all(PulsoSpacing.screen),
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            // Wrap: com fonte grande o subtítulo desce para a linha de baixo em vez de estourar.
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.end,
+              spacing: PulsoSpacing.md,
               children: [
-                Expanded(child: Text('Alertas', style: text.headlineMedium)),
+                Semantics(header: true, child: Text('Alertas', style: text.headlineMedium)),
                 Text('Por gravidade e prazo', style: text.bodyMedium?.copyWith(color: context.pulso.muted)),
               ],
             ),

@@ -48,9 +48,12 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           return ListView(
             padding: const EdgeInsets.all(PulsoSpacing.screen),
             children: [
-              Row(
+              Wrap(
+                spacing: PulsoSpacing.sm,
+                runSpacing: PulsoSpacing.xs,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  Expanded(child: Semantics(header: true, child: Text('Mapa territorial', style: text.headlineMedium))),
+                  Semantics(header: true, child: Text('Mapa territorial', style: text.headlineMedium)),
                   if (reservoir != null)
                     Chip(
                       avatar: const Icon(Icons.water_drop_outlined, size: 18),
