@@ -10,9 +10,12 @@ import 'helpers/pump_app.dart';
 void main() {
   const routes = [
     '/',
-    '/indicadores/recursos',
+    '/indicadores/agua',
     '/indicadores/clima',
-    '/indicadores/servicos',
+    '/indicadores/risco',
+    '/indicador/volume',
+    '/indicador/chuva',
+    '/indicador/registros',
     '/mapa',
     '/alertas',
     '/configuracoes',

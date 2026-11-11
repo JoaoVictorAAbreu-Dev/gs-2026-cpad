@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/theme/pulso_colors.dart';
@@ -8,7 +9,10 @@ import '../../../core/utils/formatters.dart';
 import '../../../shared/widgets/badges.dart';
 import '../../../shared/widgets/feedback.dart';
 import '../../reservoir/domain/reservoir_models.dart';
+import '../../../app/router.dart';
 import '../domain/alert.dart';
+import '../domain/confidence.dart';
+import 'alert_card.dart';
 
 /// "Como chegamos a este alerta?" — evidência, risco × confiança, limites e regra usada.
 class AlertDetailScreen extends ConsumerWidget {
@@ -47,6 +51,7 @@ class _Body extends ConsumerWidget {
     final c = context.pulso;
     final reservoir = ref.watch(reservoirProvider).valueOrNull?.data;
     final forwarded = ref.watch(decisionsProvider).where((d) => d.alertId == alert.id).firstOrNull;
+    final method = ConfidenceMethod.forRule(alert.ruleId, sigma: reservoir?.forecast?.sigma);
 
     return ListView(
       padding: const EdgeInsets.all(PulsoSpacing.screen),
@@ -62,6 +67,10 @@ class _Body extends ConsumerWidget {
             message: alert.limitations.first,
           ),
         ],
+        const SizedBox(height: PulsoSpacing.md),
+        _WindowCard(alert: alert),
+        const SizedBox(height: PulsoSpacing.md),
+        const HumanDecisionBanner(),
         const SizedBox(height: PulsoSpacing.md),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,6 +147,17 @@ class _Body extends ConsumerWidget {
           children: [for (final l in alert.limitations) _Bullet(l)],
         ),
         const SizedBox(height: PulsoSpacing.sm),
+        _Expandable(
+          title: 'Como calculamos a confiança',
+          children: [
+            Text(method.how, style: text.bodyMedium),
+            const SizedBox(height: PulsoSpacing.sm),
+            Text('A confiança cai ou deixa de valer quando:', style: text.labelLarge),
+            const SizedBox(height: PulsoSpacing.xs),
+            for (final d in method.dropsWhen) _Bullet(d),
+          ],
+        ),
+        const SizedBox(height: PulsoSpacing.sm),
         _Expandable(title: 'Regra usada', children: [Text(alert.ruleDescription, style: text.bodyMedium)]),
         if (reservoir?.metrics != null) ...[
           const SizedBox(height: PulsoSpacing.sm),
@@ -153,8 +173,15 @@ class _Body extends ConsumerWidget {
             ],
           ),
         ],
-        const SizedBox(height: PulsoSpacing.md),
-        const HumanDecisionBanner(),
+        const SizedBox(height: PulsoSpacing.sm),
+        OutlinedButton.icon(
+          icon: const Icon(Icons.show_chart),
+          label: Text('Ver indicador: ${alert.indicator.label}'),
+          onPressed: () => context.pushNamed(
+            Routes.indicatorDetail,
+            pathParameters: {'indicador': alert.indicator.slug},
+          ),
+        ),
         const SizedBox(height: PulsoSpacing.md),
         if (forwarded != null)
           InfoBanner(
@@ -179,6 +206,50 @@ class _Body extends ConsumerWidget {
           ),
         const SizedBox(height: PulsoSpacing.xl),
       ],
+    );
+  }
+}
+
+/// Janela temporal: o período observado que gerou o alerta, ou o período previsto.
+class _WindowCard extends StatelessWidget {
+  const _WindowCard({required this.alert});
+  final Alert alert;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final w = alert.window;
+    final forecast = w?.kind == WindowKind.forecast;
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(PulsoSpacing.md),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(forecast ? Icons.update : Icons.history, color: context.pulso.forecast),
+            const SizedBox(width: PulsoSpacing.md12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(forecast ? 'JANELA DA PREVISÃO' : 'JANELA OBSERVADA',
+                      style: text.labelSmall?.copyWith(color: context.pulso.muted)),
+                  const SizedBox(height: 4),
+                  Text(windowText(alert), style: text.titleMedium),
+                  const SizedBox(height: 4),
+                  Text(
+                    forecast
+                        ? 'Do último dado disponível até a data prevista. Depois dessa data o alerta expira '
+                            'e é recalculado com os dados novos.'
+                        : 'Período de dados já registrados que acionou a regra. Não é uma previsão.',
+                    style: text.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

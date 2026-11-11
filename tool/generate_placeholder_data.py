@@ -7,6 +7,8 @@ import json
 import math
 import random
 import sys
+
+from region_history import weekly_history
 from datetime import date, timedelta
 
 random.seed(2026)
@@ -49,7 +51,7 @@ payload = {
     },
     "regions": [
         {"id": a, "name": b, "short": c, "col": e, "row": f, "lastWeek": g, "previousWeek": h,
-         "lat": lat, "lon": lon,
+         "lat": lat, "lon": lon, "weekly": weekly_history(a, h, g),
          "population10k": round(random.uniform(20, 120), 1), "origin": "synthetic"}
         for a, b, c, e, f, g, h, lat, lon in regions
     ],

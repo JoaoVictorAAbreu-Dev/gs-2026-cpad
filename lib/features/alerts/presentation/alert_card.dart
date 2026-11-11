@@ -21,11 +21,11 @@ class AlertCard extends StatelessWidget {
       Severity.moderate => c.warning,
       Severity.low => c.success,
     };
-    final until = alert.validUntil;
+    final window = windowText(alert);
 
     return Semantics(
       button: true,
-      label: 'Alerta: ${alert.title}. Risco ${alert.severity.label}. ${alert.confidence.label}.'
+      label: 'Alerta: ${alert.title}. Risco ${alert.severity.label}. ${alert.confidence.label}. $window.'
           '${alert.reliable ? '' : ' Apenas informativo.'} Toque para ver como chegamos a este alerta.',
       excludeSemantics: true,
       child: Card(
@@ -60,7 +60,7 @@ class AlertCard extends StatelessWidget {
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
-                                until != null ? 'Até ${Fmt.date(until)}' : 'Observado na série atual',
+                                window,
                                 style: text.bodyMedium?.copyWith(color: c.muted),
                               ),
                             ),
@@ -82,6 +82,16 @@ class AlertCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// "Previsão de 07/11 a 14/11 (7 dias)" ou "Observado de 03/11 a 10/11 (7 dias)".
+String windowText(Alert a) {
+  final w = a.window;
+  if (w == null) {
+    return a.validUntil != null ? 'Até ${Fmt.date(a.validUntil!)}' : 'Observado na série atual';
+  }
+  final kind = w.kind == WindowKind.forecast ? 'Previsão' : 'Observado';
+  return '$kind de ${Fmt.dayMonth(w.from)} a ${Fmt.dayMonth(w.to)}/${w.to.year} (${w.days} dias)';
 }
 
 class _Labeled extends StatelessWidget {
