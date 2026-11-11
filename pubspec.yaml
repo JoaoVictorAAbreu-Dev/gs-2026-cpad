@@ -31,3 +31,14 @@ flutter:
   uses-material-design: true
   assets:
     - assets/data/
+  # Inter 4.0 (SIL OFL 1.1) — tipografia do design system; embutida para funcionar offline.
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/inter/Inter-Regular.otf
+        - asset: assets/fonts/inter/Inter-Medium.otf
+          weight: 500
+        - asset: assets/fonts/inter/Inter-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/inter/Inter-Bold.otf
+          weight: 700
