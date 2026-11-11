@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,6 +13,7 @@ import '../../shared/widgets/app_header.dart';
 import '../../shared/widgets/badges.dart';
 import '../../shared/widgets/feedback.dart';
 import '../../shared/widgets/reservoir_chart.dart';
+import '../../shared/widgets/social_impact_card.dart';
 import '../alerts/presentation/alert_card.dart';
 import '../reservoir/domain/reservoir_models.dart';
 import '../settings/settings_controller.dart';
@@ -63,6 +65,7 @@ class _Content extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.all(PulsoSpacing.screen),
       children: [
+        const _BandChangeNotice(),
         FreshnessBanner(
           freshness: result.freshness,
           fetchedAt: result.fetchedAt,
@@ -94,6 +97,10 @@ class _Content extends ConsumerWidget {
           )
         else
           AlertCard(alert: alerts.first),
+        if (ref.watch(socialImpactProvider) case final impact?) ...[
+          const SizedBox(height: PulsoSpacing.md),
+          SocialImpactCard(result: impact, realData: r.origin == DataOrigin.real, compact: true),
+        ],
         const SizedBox(height: PulsoSpacing.md),
         FilledButton.icon(
           onPressed: () => context.pushNamed(Routes.newReport),
@@ -194,8 +201,56 @@ class _ReservoirCard extends ConsumerWidget {
               'Fonte: ${snapshot.sourceLabel}. Sinal exploratório, não é alerta oficial.',
               style: text.bodyMedium?.copyWith(color: c.muted),
             ),
+            const SizedBox(height: PulsoSpacing.xs),
+            TextButton.icon(
+              onPressed: () => _copySummary(context, snapshot),
+              icon: const Icon(Icons.copy_rounded, size: 18),
+              label: const Text('Copiar resumo para compartilhar'),
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Texto curto para mandar no WhatsApp/e-mail — sempre com fonte e o aviso de sinal exploratório.
+Future<void> _copySummary(BuildContext context, ReservoirSnapshot s) async {
+  final last = s.latest;
+  final year = s.changeOver(365);
+  final f = s.forecast;
+  final summary = [
+    'PULSO · ${s.name}',
+    '${Fmt.percent(last.volumePercent)} do volume útil em ${Fmt.date(last.date)} '
+        '(faixa ${last.band.label}, ref.)',
+    if (year != null) '${Fmt.pp(year)} em um ano',
+    if (f != null) 'Previsão para ${Fmt.date(f.date)}: ${Fmt.percent(f.value)} (±${Fmt.number(f.sigma, 1)} p.p.)',
+    'Fonte: ${s.sourceLabel}. Sinal exploratório, não é alerta oficial.',
+  ].join('\n');
+  await Clipboard.setData(ClipboardData(text: summary));
+  if (context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Resumo copiado.')));
+  }
+}
+
+/// Aviso quando a faixa mudou desde a última visita (substitui notificação push nesta versão).
+class _BandChangeNotice extends ConsumerWidget {
+  const _BandChangeNotice();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final change = ref.watch(bandChangeProvider);
+    if (change == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: PulsoSpacing.md),
+      child: InfoBanner(
+        icon: change.improved ? Icons.trending_up_rounded : Icons.trending_down_rounded,
+        tone: change.improved ? BannerTone.info : BannerTone.danger,
+        title: 'A faixa mudou desde sua última visita',
+        message: '${change.from.label} → ${change.to.label}. ${change.to.citizenMeaning}',
+        actionLabel: 'Entendi',
+        actionIcon: Icons.check,
+        onAction: () => ref.read(bandChangeProvider.notifier).markSeen(),
       ),
     );
   }

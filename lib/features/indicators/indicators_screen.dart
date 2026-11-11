@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/providers.dart';
 import '../../app/router.dart';
+import '../../core/result/data_result.dart';
 import '../../core/theme/pulso_colors.dart';
 import '../../core/theme/tokens.dart';
 import '../../core/utils/formatters.dart';
@@ -11,8 +12,10 @@ import '../../shared/widgets/app_header.dart';
 import '../../shared/widgets/badges.dart';
 import '../../shared/widgets/feedback.dart';
 import '../../shared/widgets/reservoir_chart.dart';
+import '../../shared/widgets/social_impact_card.dart';
 import '../reservoir/data/territory_data.dart';
 import '../reservoir/domain/reservoir_models.dart';
+import '../weather/weather_repository.dart';
 
 enum IndicatorTab {
   climate('clima', 'Clima'),
@@ -82,7 +85,13 @@ class _IndicatorsScreenState extends ConsumerState<IndicatorsScreen> {
             IndicatorTab.services => territory.when<List<Widget>>(
                 loading: () => const [LoadingSkeleton()],
                 error: (_, __) => [ErrorState(onRetry: () => ref.invalidate(territoryProvider))],
-                data: (t) => [_ServicesTab(regions: t.data.regions)],
+                data: (t) => [
+                  if (ref.watch(socialImpactProvider) case final impact?) ...[
+                    SocialImpactCard(result: impact, realData: t.data.reservoir.origin == DataOrigin.real),
+                    const SizedBox(height: PulsoSpacing.md),
+                  ],
+                  _ServicesTab(regions: t.data.regions),
+                ],
               ),
             IndicatorTab.climate => reservoir.when<List<Widget>>(
                 loading: () => const [LoadingSkeleton()],
@@ -164,7 +173,11 @@ class _ResourcesTab extends StatelessWidget {
                 const SizedBox(height: PulsoSpacing.sm),
                 if (m != null) ...[
                   _ErrorBar(label: 'Repetir o valor de hoje', value: m.maeBaseline, max: m.maeBaseline),
-                  _ErrorBar(label: 'Modelo', value: m.maeModel, max: m.maeBaseline),
+                  _ErrorBar(
+                    label: snapshot.forecast?.method ?? 'Modelo',
+                    value: m.maeModel,
+                    max: m.maeBaseline,
+                  ),
                   Text(
                     'Erro médio em 7 dias: ${(m.improvement * 100).round()}% menor que repetir o valor de hoje '
                     '(teste: ${m.testPeriod}).',
@@ -183,7 +196,113 @@ class _ResourcesTab extends StatelessWidget {
             ),
           ),
         ),
+        if (snapshot.factors.isNotEmpty && snapshot.forecast != null) ...[
+          const SizedBox(height: PulsoSpacing.md),
+          _FactorsCard(snapshot: snapshot),
+        ],
       ],
+    );
+  }
+}
+
+/// "O que levou à previsão": decomposição exata da previsão linear do Ridge.
+class _FactorsCard extends StatelessWidget {
+  const _FactorsCard({required this.snapshot});
+  final ReservoirSnapshot snapshot;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final c = context.pulso;
+    final f = snapshot.forecast!;
+    final maxAbs = snapshot.factors.map((x) => x.contribution.abs()).reduce((a, b) => a > b ? a : b);
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(PulsoSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('O que levou à previsão de ${Fmt.percent(f.value)}', style: text.titleMedium),
+            const SizedBox(height: PulsoSpacing.md12),
+            _FactorRow(label: 'Último dado (${Fmt.dayMonth(snapshot.latest.date)})', value: Fmt.percent(snapshot.latest.volumePercent)),
+            for (final x in snapshot.factors)
+              Semantics(
+                label: '${x.label}: ${x.contribution >= 0 ? 'mais' : 'menos'} ${Fmt.number(x.contribution.abs(), 2)} pontos',
+                excludeSemantics: true,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: PulsoSpacing.sm),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _FactorRow(
+                        label: x.label,
+                        value: Fmt.pp(x.contribution, 2),
+                        color: x.contribution < 0 ? c.danger : c.success,
+                      ),
+                      const SizedBox(height: 4),
+                      LayoutBuilder(
+                        builder: (context, box) {
+                          final half = box.maxWidth / 2;
+                          final w = maxAbs == 0 ? 0.0 : half * x.contribution.abs() / maxAbs;
+                          return SizedBox(
+                            height: 8,
+                            child: Stack(
+                              children: [
+                                Positioned(left: half, top: 0, bottom: 0, child: Container(width: 1, color: c.muted)),
+                                Positioned(
+                                  left: x.contribution < 0 ? half - w : half,
+                                  width: w,
+                                  top: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: x.contribution < 0 ? c.danger : c.success,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            _FactorRow(label: 'Previsão para ${Fmt.dayMonth(f.date)}', value: Fmt.percent(f.value), color: c.forecast),
+            const SizedBox(height: PulsoSpacing.sm),
+            Text(
+              'Contribuição de cada fator no modelo ${f.method}, em pontos percentuais. A soma dos fatores é a '
+              'variação prevista em 7 dias. Erro típico: ±${Fmt.number(f.sigma, 2)} p.p.',
+              style: text.bodyMedium?.copyWith(color: c.muted),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FactorRow extends StatelessWidget {
+  const _FactorRow({required this.label, required this.value, this.color});
+  final String label;
+  final String value;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: Text(label, style: text.bodyMedium)),
+          const SizedBox(width: PulsoSpacing.sm),
+          Text(value, style: text.labelLarge?.copyWith(color: color)),
+        ],
+      ),
     );
   }
 }
@@ -219,35 +338,146 @@ class _ErrorBar extends StatelessWidget {
   }
 }
 
-class _ClimateTab extends StatelessWidget {
+class _ClimateTab extends ConsumerWidget {
   const _ClimateTab({required this.snapshot, required this.days});
   final ReservoirSnapshot snapshot;
   final int days;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final text = Theme.of(context).textTheme;
+    final c = context.pulso;
     final pts = _lastDays(snapshot.series, days);
     final rain = pts.fold<double>(0, (sum, p) => sum + (p.rainMm ?? 0));
     final rainyDays = pts.where((p) => (p.rainMm ?? 0) >= 1).length;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(PulsoSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Chuva na bacia · $days dias', style: text.titleMedium),
-            const SizedBox(height: PulsoSpacing.xs),
-            DataSourceTag(real: snapshot.origin == DataOrigin.real),
-            const SizedBox(height: PulsoSpacing.md12),
-            Text('${rain.round()} mm', style: text.headlineMedium),
-            Text('$rainyDays dias com chuva de 1 mm ou mais', style: text.bodyMedium),
-            const SizedBox(height: PulsoSpacing.md),
-            Text(
-              'Previsão do tempo para os próximos dias (Open-Meteo) entra na próxima etapa.',
-              style: text.bodyMedium?.copyWith(color: context.pulso.muted),
+    // Mesmo período um ano antes, quando a série cobre.
+    final end = snapshot.latest.date.subtract(const Duration(days: 365));
+    final start = end.subtract(Duration(days: days));
+    final lastYear = snapshot.series.where((p) => p.date.isAfter(start) && !p.date.isAfter(end)).toList();
+    final rainLastYear = lastYear.length >= days * 0.9
+        ? lastYear.fold<double>(0, (sum, p) => sum + (p.rainMm ?? 0))
+        : null;
+
+    final weather = ref.watch(weatherProvider);
+
+    return Column(
+      children: [
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(PulsoSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Chuva na bacia · $days dias', style: text.titleMedium),
+                const SizedBox(height: PulsoSpacing.xs),
+                DataSourceTag(real: snapshot.origin == DataOrigin.real),
+                const SizedBox(height: PulsoSpacing.md12),
+                Text('${rain.round()} mm', style: text.headlineMedium),
+                Text('$rainyDays dias com chuva de 1 mm ou mais', style: text.bodyMedium),
+                if (rainLastYear != null) ...[
+                  const SizedBox(height: PulsoSpacing.sm),
+                  Text(
+                    'Mesmo período do ano anterior: ${rainLastYear.round()} mm '
+                    '(${rain >= rainLastYear ? '+' : '−'}${(rain - rainLastYear).abs().round()} mm).',
+                    style: text.labelLarge?.copyWith(color: rain >= rainLastYear ? c.success : c.danger),
+                  ),
+                ],
+                const SizedBox(height: PulsoSpacing.sm),
+                Text(
+                  'Média dos postos pluviométricos do sistema (Sabesp). Não mostra a chuva em cada bairro.',
+                  style: text.bodyMedium?.copyWith(color: c.muted),
+                ),
+              ],
             ),
+          ),
+        ),
+        const SizedBox(height: PulsoSpacing.md),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(PulsoSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Próximos dias na represa · Open-Meteo', style: text.titleMedium),
+                const SizedBox(height: PulsoSpacing.md12),
+                ...weather.when<List<Widget>>(
+                  loading: () => [const LinearProgressIndicator()],
+                  error: (_, __) => [Text('Previsão do tempo indisponível agora.', style: text.bodyMedium)],
+                  data: (result) {
+                    if (result == null) {
+                      return [
+                        Text(
+                          'Sem conexão e sem previsão salva neste aparelho.',
+                          style: text.bodyMedium,
+                        ),
+                        TextButton.icon(
+                          onPressed: () => ref.invalidate(weatherProvider),
+                          icon: const Icon(Icons.refresh, size: 18),
+                          label: const Text('Tentar de novo'),
+                        ),
+                      ];
+                    }
+                    return [
+                      if (result.freshness == Freshness.cached)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: PulsoSpacing.sm),
+                          child: Text(
+                            'Cópia salva em ${Fmt.date(result.fetchedAt)}, ${Fmt.time(result.fetchedAt)}.',
+                            style: text.bodyMedium?.copyWith(color: c.warning),
+                          ),
+                        ),
+                      Wrap(
+                        spacing: PulsoSpacing.sm,
+                        runSpacing: PulsoSpacing.sm,
+                        children: [for (final d in result.data) _WeatherDay(day: d)],
+                      ),
+                      const SizedBox(height: PulsoSpacing.sm),
+                      Text(
+                        'Previsão meteorológica externa, próxima à represa Jaguari-Jacareí. '
+                        'Não entra no modelo de volume.',
+                        style: text.bodyMedium?.copyWith(color: c.muted),
+                      ),
+                    ];
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _WeatherDay extends StatelessWidget {
+  const _WeatherDay({required this.day});
+  final DailyWeather day;
+
+  static const _weekdays = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final wd = _weekdays[day.date.weekday - 1];
+    final temp = day.maxTemp.isNaN ? '—' : '${day.maxTemp.round()}°';
+    return Semantics(
+      label: '$wd ${Fmt.dayMonth(day.date)}: máxima $temp, chuva ${Fmt.number(day.rainMm)} milímetros'
+          '${day.rainProbability == null ? '' : ', chance de ${day.rainProbability} por cento'}',
+      excludeSemantics: true,
+      child: Container(
+        width: 76,
+        padding: const EdgeInsets.symmetric(vertical: PulsoSpacing.sm, horizontal: PulsoSpacing.xs),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(PulsoRadius.button),
+        ),
+        child: Column(
+          children: [
+            Text(wd, style: text.labelLarge),
+            Text(temp, style: text.titleMedium),
+            Text('${day.rainMm.round()} mm', style: text.bodyMedium),
+            if (day.rainProbability != null) Text('${day.rainProbability}%', style: text.labelSmall),
           ],
         ),
       ),
