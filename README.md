@@ -335,7 +335,7 @@ flutter test      # 82 testes
 
 ## 10. Vídeo
 
-Link: _a publicar_. Roteiro de até 3 minutos, com cenas, tempos e o critério da rubrica de cada cena, em [`docs/VIDEO.md`](docs/VIDEO.md).
+Link: _a publicar_. Roteiro de até 3 minutos, com cenas, tempos e o critério da rubrica de cada cena, em [`docs/VIDEO.md`](docs/VIDEO.md); falas para a narração, com tempos, em [`docs/NARRACAO.md`](docs/NARRACAO.md).
 
 ## 11. Licença
 
