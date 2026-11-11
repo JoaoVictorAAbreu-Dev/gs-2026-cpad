@@ -39,7 +39,11 @@ void main() {
     await pumpApp(tester, {'consent.version': 1});
     expect(find.text('Cantareira · volume útil'), findsOneWidget);
     expect(find.text('DADOS SINTÉTICOS'), findsWidgets);
-    await tester.scrollUntilVisible(find.textContaining('decisão final é sempre de uma pessoa'), 300);
+    await tester.scrollUntilVisible(
+      find.textContaining('decisão final é sempre de uma pessoa'),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.textContaining('decisão final é sempre de uma pessoa'), findsWidgets);
   });
 }
