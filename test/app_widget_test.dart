@@ -25,9 +25,12 @@ void main() {
   testWidgets('sem consentimento, mostra a tela de consentimento com botão desabilitado', (tester) async {
     await pumpApp(tester, {});
     expect(find.text('Seus dados, suas regras'), findsOneWidget);
+    // A lista é preguiçosa: rola até o fim para o botão ser montado.
+    await tester.scrollUntilVisible(find.text('Aceitar e continuar'), 200, scrollable: find.byType(Scrollable).first);
     final button = tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Aceitar e continuar'));
     expect(button.onPressed, isNull);
 
+    await tester.ensureVisible(find.byType(Checkbox));
     await tester.tap(find.byType(Checkbox));
     await tester.pump();
     await tester.tap(find.text('Aceitar e continuar'));
