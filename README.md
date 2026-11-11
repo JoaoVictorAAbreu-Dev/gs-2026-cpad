@@ -1,158 +1,277 @@
 Integrantes: João Victor Alves de Abreu (RM 564946) e Rodrigo Kenshin Viana Matayoshi (RM 564026).
 
+<div align="center">
+
 # PULSO — Radar Territorial
 
-> App Flutter que antecipa a mudança de faixa do Sistema Cantareira e mostra, para cada alerta, a evidência, a confiança e os limites — a decisão final é sempre humana.
+**App Flutter que antecipa a mudança de faixa do Sistema Cantareira e mostra, para cada alerta, a evidência, a confiança e os limites — a decisão final é sempre humana.**
 
-**Global Solution 2026.2 · Cross-Platform Application Development · FIAP** — tema *Territory Predictive Insights*.
+Global Solution 2026.2 · Cross-Platform Application Development · FIAP — *Territory Predictive Insights*
 
-## Problema e público
+<br>
 
-Metade da Região Metropolitana de São Paulo é abastecida pelo Sistema Cantareira, que opera em faixas definidas pela Resolução Conjunta ANA/DAEE nº 925/2017. Quando o volume cai de faixa, a retirada de água é reduzida — e moradores e gestores costumam saber disso tarde.
+![Flutter](https://img.shields.io/badge/Flutter-3.47.9-02569B?logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-3.13-0175C2?logo=dart&logoColor=white)
+![Material 3](https://img.shields.io/badge/Material-3-757575?logo=materialdesign&logoColor=white)
+![Riverpod](https://img.shields.io/badge/Riverpod-2.6-00B4AB)
+![go_router](https://img.shields.io/badge/go__router-14.6-4A90D9)
+<br>
+![Testes](https://img.shields.io/badge/testes-63%20passando-2EA44F?logo=checkmarx&logoColor=white)
+![flutter analyze](https://img.shields.io/badge/flutter%20analyze-sem%20avisos-2EA44F)
+![Acessibilidade](https://img.shields.io/badge/acessibilidade-texto%20200%25%20%C2%B7%20alto%20contraste-6A1B9A)
+![Plataformas](https://img.shields.io/badge/plataformas-Android%20%C2%B7%20iOS%20%C2%B7%20Web%20%C2%B7%20Linux-455A64)
+<br>
+![Dados](https://img.shields.io/badge/dados-Sabesp%20%E2%80%94%20reais-0B6E5A)
+![Clima](https://img.shields.io/badge/clima-Open--Meteo-F57C00)
+![Benefício social](https://img.shields.io/badge/anteced%C3%AAncia%20m%C3%A9dia-5%2C8%20dias-B4233A)
+![Licença](https://img.shields.io/badge/uso-acad%C3%AAmico-lightgrey)
 
-- **Gestores públicos**: acompanham indicadores, previsões e alertas, ajustam limiares e encaminham alertas para análise humana.
-- **Cidadãos**: entendem a situação em linguagem simples e registram ocorrências sem se identificar.
-- **Benefício social medido**: reexecutando a regra de alerta sobre a série real (2024–2026), o app teria avisado **6 de 6 pioras de faixa, com 5,8 dias de antecedência média** (ver [Benefício social](#benefício-social)).
+</div>
 
-## Integrantes
+## 👥 Integrantes
 
-| Nome | RM |
+| Nome | RM | GitHub |
+|---|---|---|
+| **João Victor Alves de Abreu** | 564946 | [@JoaoVictorAAbreu-Dev](https://github.com/JoaoVictorAAbreu-Dev) |
+| **Rodrigo Kenshin Viana Matayoshi** | 564026 | — |
+
+## 📑 Sumário
+
+1. [Problema e público](#-problema-e-público)
+2. [Solução em números](#-solução-em-números)
+3. [Demonstração visual](#-demonstração-visual)
+4. [Funcionalidades](#-funcionalidades)
+5. [Dados e fontes](#-dados-e-fontes)
+6. [Alertas e transparência](#-alertas-e-transparência)
+7. [Benefício social](#-benefício-social)
+8. [Privacidade e acessibilidade](#-privacidade-e-acessibilidade)
+9. [Arquitetura e decisões técnicas](#-arquitetura-e-decisões-técnicas)
+10. [Testes](#-testes)
+11. [Como executar](#-como-executar)
+12. [Vídeo de demonstração](#-vídeo-de-demonstração)
+13. [Atendimento à rubrica](#-atendimento-à-rubrica)
+
+---
+
+## 🎯 Problema e público
+
+Metade da Região Metropolitana de São Paulo é abastecida pelo **Sistema Cantareira**, que opera em faixas definidas pela Resolução Conjunta ANA/DAEE nº 925/2017. Quando o volume cai de faixa, a retirada de água é reduzida — e moradores e gestores costumam saber disso tarde.
+
+| Público | O que o PULSO entrega |
 |---|---|
-| João Victor Alves de Abreu | 564946 |
-| Rodrigo Kenshin Viana Matayoshi | 564026 |
+| **Gestor público** | Indicadores, previsão de 7 dias, alertas com evidência e confiança, limiares ajustáveis e encaminhamento para análise humana |
+| **Cidadão** | Situação em linguagem simples, mapa da sua região e registro de ocorrências sem se identificar |
 
-## Demonstração visual
+## 📊 Solução em números
 
-Capturas do app em 390×844 com os dados reais embutidos (série da Sabesp até 07/11/2026). Por isso aparece o aviso "Dados com mais de 3 dias": o app avisa e reduz a confiança das previsões quando o último dado envelhece.
+| | |
+|---|---|
+| **52,9 %** | volume útil do Cantareira em 07/11/2026 (faixa Atenção, +29,4 p.p. em um ano) |
+| **54,5 %** | previsão para 14/11/2026 (Ridge, erro típico ±1,25 p.p.) |
+| **6 de 6** | pioras de faixa que a regra de alerta teria avisado em 2024–2026 |
+| **5,8 dias** | antecedência média desses avisos |
+| **63** | testes automatizados, incluindo todas as telas com texto em 200 % |
 
-| Consentimento | Visão geral | Alerta em destaque e benefício |
-|---|---|---|
-| ![Consentimento](assets/screenshots/01-consentimento.png) | ![Visão geral](assets/screenshots/02-visao-geral.png) | ![Visão geral, alertas](assets/screenshots/03-visao-geral-alertas.png) |
+## 📱 Demonstração visual
 
-| Indicadores · Recursos | Fatores da previsão | Indicadores · Clima |
-|---|---|---|
-| ![Recursos](assets/screenshots/04-indicadores-recursos.png) | ![Fatores](assets/screenshots/05-indicadores-recursos-fatores.png) | ![Clima](assets/screenshots/06-indicadores-clima.png) |
+Capturas em 390×844 com os dados reais embutidos (série até 07/11/2026). O aviso "Dados com mais de 3 dias" é proposital: quando o último dado envelhece, o app avisa e reduz a confiança das previsões.
 
-| Indicadores · Serviços | Mapa territorial | Alertas |
-|---|---|---|
-| ![Serviços](assets/screenshots/07-indicadores-servicos.png) | ![Mapa](assets/screenshots/08-mapa.png) | ![Alertas](assets/screenshots/09-alertas.png) |
+<table>
+  <tr>
+    <td align="center"><img src="assets/screenshots/01-consentimento.png" width="200"><br><sub>Consentimento</sub></td>
+    <td align="center"><img src="assets/screenshots/02-visao-geral.png" width="200"><br><sub>Visão geral</sub></td>
+    <td align="center"><img src="assets/screenshots/03-visao-geral-alertas.png" width="200"><br><sub>Alerta em destaque</sub></td>
+    <td align="center"><img src="assets/screenshots/04-indicadores-recursos.png" width="200"><br><sub>Recursos</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/05-indicadores-recursos-fatores.png" width="200"><br><sub>Fatores da previsão</sub></td>
+    <td align="center"><img src="assets/screenshots/06-indicadores-clima.png" width="200"><br><sub>Clima (Open-Meteo)</sub></td>
+    <td align="center"><img src="assets/screenshots/07-indicadores-servicos.png" width="200"><br><sub>Serviços e benefício social</sub></td>
+    <td align="center"><img src="assets/screenshots/08-mapa.png" width="200"><br><sub>Mapa territorial</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/09-alertas.png" width="200"><br><sub>Alertas</sub></td>
+    <td align="center"><img src="assets/screenshots/10-alerta-detalhe.png" width="200"><br><sub>Detalhe do alerta</sub></td>
+    <td align="center"><img src="assets/screenshots/11-registro-ocorrencia.png" width="200"><br><sub>Registro de ocorrência</sub></td>
+    <td align="center"><img src="assets/screenshots/12-meus-registros.png" width="200"><br><sub>Meus registros</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/13-configuracoes.png" width="200"><br><sub>Configurações</sub></td>
+    <td align="center"><img src="assets/screenshots/14-limiares.png" width="200"><br><sub>Limiares de alerta</sub></td>
+    <td align="center"><img src="assets/screenshots/15-alto-contraste-texto-200.png" width="200"><br><sub>Alto contraste + texto 200 %</sub></td>
+    <td align="center"><img src="assets/screenshots/16-tema-escuro.png" width="200"><br><sub>Tema escuro</sub></td>
+  </tr>
+</table>
 
-| Detalhe do alerta | Registro de ocorrência | Meus registros |
-|---|---|---|
-| ![Detalhe](assets/screenshots/10-alerta-detalhe.png) | ![Registro](assets/screenshots/11-registro-ocorrencia.png) | ![Meus registros](assets/screenshots/12-meus-registros.png) |
+## ✨ Funcionalidades
 
-| Configurações | Limiares de alerta | Alto contraste + texto 200% | Tema escuro |
-|---|---|---|---|
-| ![Configurações](assets/screenshots/13-configuracoes.png) | ![Limiares](assets/screenshots/14-limiares.png) | ![Alto contraste](assets/screenshots/15-alto-contraste-texto-200.png) | ![Escuro](assets/screenshots/16-tema-escuro.png) |
+<details open>
+<summary><b>Visão geral e dashboards</b></summary>
 
-## Funcionalidades
-
-- **Consentimento** explícito antes do uso, com o que é guardado e o que nunca é pedido.
-- **Visão geral**: volume útil, faixa de operação, variação em 1 ano, "o que isso significa", gráfico de 30 dias + previsão com faixa de erro, aviso de mudança de faixa desde a última visita e "copiar resumo" com fonte.
-- **Três dashboards** (`/indicadores/:aba`):
-  - *Recursos* — série de 7/30/90 dias com faixas de referência, erro do modelo × baseline e "o que levou à previsão".
-  - *Clima* — chuva na bacia × mesmo período do ano anterior e previsão de 5 dias da **Open-Meteo**.
+- **Visão geral**: volume útil, faixa de operação, variação em 1 ano, "o que isso significa", gráfico de 30 dias com previsão e faixa de erro, aviso de mudança de faixa desde a última visita e "copiar resumo" com fonte.
+- **Três dashboards** em `/indicadores/:aba`:
+  - *Recursos* — série de 7/30/90 dias sobre as faixas de referência, erro do modelo × baseline e "o que levou à previsão".
+  - *Clima* — chuva na bacia × mesmo período do ano anterior e previsão de 5 dias da Open-Meteo.
   - *Serviços* — benefício social e registros por 100 mil habitantes.
 - **Mapa territorial**: cartograma hexagonal com Hoje / +7 dias, painel da região, "Registrar aqui" e versão em lista.
-- **Alertas** por regras transparentes, com risco, confiança, evidências, limitações e regra usada; detalhe em `/alertas/:id` e **encaminhamento para análise humana** (registrado, sem ação automática).
-- **Registro de ocorrência** em 4 etapas com validação; dados pessoais detectados e removidos antes de salvar; protocolo aleatório.
-- **Meus registros** com status real e fila offline (envio por API simulada).
-- **Limiares de alerta** (formulário do gestor com validação) que recalculam os alertas em todas as telas.
-- **Estados**: carregando, erro, vazio, cópia salva (offline) e dados desatualizados.
-- **Acessibilidade**: temas claro, escuro e alto contraste; texto até 200%; reduzir animações; leitura simples; "ver como tabela" nos gráficos; `Semantics` nos números, gráficos e mapa.
 
-## Dados
+</details>
+
+<details open>
+<summary><b>Alertas e decisão humana</b></summary>
+
+- Alertas por regras transparentes, separando **risco** (impacto) e **confiança** (probabilidade).
+- Detalhe em `/alertas/:id` com evidências, limitações, regra usada e métricas do modelo.
+- **Encaminhar para análise humana** registra a decisão; nenhuma ação é automática.
+- **Limiares do gestor** (formulário validado) recalculam os alertas em todas as telas.
+
+</details>
+
+<details open>
+<summary><b>Registro de ocorrências e uso offline</b></summary>
+
+- Registro em 4 etapas (tipo, região, descrição, revisão) com validação e protocolo aleatório.
+- Telefone, CPF, e-mail, CEP e endereço são detectados e removidos antes de salvar.
+- **Meus registros** com status real e fila offline (envio por API simulada).
+- Dados em três camadas: fonte remota → cache local → pacote embutido.
+- Estados de carregamento, erro, vazio, cópia salva e dados desatualizados.
+
+</details>
+
+## 🗂️ Dados e fontes
 
 | Dado | Origem | Etiqueta no app |
 |---|---|---|
-| Volume útil, chuva, vazões do Cantareira (01/01/2024–07/11/2026) | Sabesp, Portal dos Mananciais — extraído e validado no projeto de Data Science da GS ([SHA-256 conferido](tool/build_pulso_data.py)) | DADOS REAIS |
-| Previsão de 7 dias e métricas do modelo | Ridge (α = 100) do projeto DSA, reaplicado por `tool/build_pulso_data.py`; erro: validação walk-forward jan/2025–set/2026 | DADOS REAIS |
-| Previsão do tempo (5 dias) | [Open-Meteo](https://open-meteo.com/) (API pública, sem chave), com cache local | — |
-| Ocorrências por região | Sintéticas — não há dado público por região | DADOS SINTÉTICOS |
+| Volume útil, chuva e vazões do Cantareira (01/01/2024–07/11/2026) | Sabesp, Portal dos Mananciais — extraído e validado no projeto de Data Science da GS (SHA-256 conferido em `tool/build_pulso_data.py`) | `DADOS REAIS` |
+| Previsão de 7 dias e métricas | Ridge (α = 100) do projeto DSA; erro da validação walk-forward jan/2025–set/2026 (638 previsões) | `DADOS REAIS` |
+| Previsão do tempo (5 dias) | [Open-Meteo](https://open-meteo.com/), API pública sem chave, com cache local | — |
+| Ocorrências por região | Sintéticas — não há dado público por região | `DADOS SINTÉTICOS` |
 
-O pacote `assets/data/pulso_data.json` (esquema v1) é gerado por:
+Gerar o pacote `assets/data/pulso_data.json` (esquema v1):
 
 ```bash
 python3 tool/generate_placeholder_data.py   # regiões sintéticas
 python3 tool/build_pulso_data.py            # série real + previsão Ridge
 ```
 
-O app lê o pacote em três camadas: **fonte remota** (`--dart-define=PULSO_DATA_URL=…`) → **cache local** → **pacote embutido**. Cada tela sabe de onde veio o dado e quando.
+## 🚨 Alertas e transparência
 
-## Alertas
+| Regra | Dispara quando | Gravidade |
+|---|---|---|
+| **Previsão abaixo do limiar** | Chance ≥ 30 % de o volume em 7 dias ficar abaixo do limite da faixa (ou do limiar do gestor). Chance = Φ((limiar − previsão) / erro típico) | Alta se levar às faixas Restrição ou Especial |
+| **Queda contínua** | N janelas de 30 dias seguidas com média menor que a anterior | Moderada |
+| **Alta de ocorrências** | ≥ 5 registros na semana e ≥ 1,5× a semana anterior | Alta a partir de 8 (mesma regra do mapa) |
 
-1. **Previsão abaixo do limiar** — chance de o volume em 7 dias ficar abaixo do limite da faixa atual (ou do limiar do gestor) ≥ 30%. Chance = Φ((limiar − previsão) / erro típico).
-2. **Queda contínua** — N janelas de 30 dias seguidas com média menor que a anterior.
-3. **Alta de ocorrências** — ≥ 5 registros na semana e ≥ 1,5× a semana anterior; gravidade alta a partir de 8 (mesma regra do mapa).
+- **Confiança**: < 60 % baixa · 60–85 % média · > 85 % alta.
+- **Quando não confiar**: dados com mais de 3 dias reduzem a confiança em um nível; com mais de 30 dias o alerta vira apenas informativo. A chance supõe erro aproximadamente normal e não considera chuvas extremas, mudanças de operação nem outros sistemas produtores.
+- **Decisão humana**: o app recomenda, não decide.
 
-- **Confiança**: < 60% baixa · 60–85% média · > 85% alta.
-- **Quando não confiar**: dados com mais de 3 dias reduzem a confiança em um nível; com mais de 30 dias o alerta vira apenas informativo. A chance supõe erro aproximadamente normal; não considera chuvas extremas nem mudanças de operação; um único sistema produtor.
-- **Decisão humana**: nenhuma regra executa ação. "Encaminhar para análise humana" só registra que uma pessoa assumiu a decisão.
+## 💚 Benefício social
 
-## Benefício social
-
-`LeadTimeBacktest` (`lib/features/alerts/domain/`) reexecuta a regra 1 em cada dia de 31/01/2024 a 07/11/2026 usando **apenas os dados até aquele dia** e mede quantos dias antes de cada piora de faixa o alerta começou:
+`LeadTimeBacktest` reexecuta a regra de previsão em cada dia de 31/01/2024 a 07/11/2026, usando **apenas os dados disponíveis até aquele dia**, e mede quantos dias antes de cada piora de faixa o alerta começou.
 
 | Pioras de faixa | Avisadas | Antecedência média | Dias com alerta | Sem piora em 7 dias |
-|---|---|---|---|---|
-| 6 | 6 | **5,8 dias** | 51 | 16 (acerto de 69%) |
+|:---:|:---:|:---:|:---:|:---:|
+| 6 | **6** | **5,8 dias** | 51 | 16 (acerto de 69 %) |
 
-Resultado conferido por uma reimplementação independente em Python sobre o mesmo JSON. A antecedência é limitada ao horizonte de 7 dias da previsão.
+Resultado conferido por uma reimplementação independente em Python. A antecedência é limitada ao horizonte de 7 dias da previsão.
 
-## Privacidade e inclusão
+## 🔒 Privacidade e acessibilidade
 
-- Nada sai do aparelho sem consentimento; sem nome, telefone, CPF, e-mail ou endereço — só região.
-- Descrições passam por um detector de dados pessoais, que avisa e mascara antes de salvar.
-- "Apagar meus dados locais" remove registros, preferências, decisões, limiares e caches.
-- Gravidade sempre com ícone + texto (nunca só cor); alvos de toque ≥ 48 dp; fonte Inter embutida (funciona offline).
+| Privacidade | Acessibilidade |
+|---|---|
+| Consentimento antes de qualquer uso | Temas claro, escuro e alto contraste |
+| Sem nome, telefone, CPF, e-mail ou endereço — só a região | Texto até 200 % sem quebrar a tela (testado em 360 px) |
+| Dados pessoais digitados são detectados e removidos | Gravidade sempre com ícone + texto, nunca só cor |
+| Protocolo aleatório, sem identificador do aparelho | `Semantics` em números, gráficos e mapa; "ver como tabela" |
+| "Apagar meus dados locais" remove tudo do aparelho | Alvos de toque ≥ 48 dp; reduzir animações; leitura simples |
 
-## Tecnologias e decisões técnicas
+## 🏗️ Arquitetura e decisões técnicas
+
+```
+lib/
+├── app/          rotas (go_router), shell com 4 abas, providers globais
+├── core/         tema (tokens, 3 modos), formatação pt-BR, detector de dados pessoais
+├── shared/       componentes reutilizáveis (badges, gráfico, estados, cards)
+└── features/
+    ├── reservoir/   domínio (faixas, previsão) + repositório com fallback
+    ├── alerts/      motor de alertas, confiança, backtest + telas
+    ├── indicators/  3 dashboards
+    ├── map/         cartograma e risco por região
+    ├── reports/     registro de ocorrências, fila offline
+    ├── weather/     Open-Meteo com cache
+    ├── settings/    preferências, limiares, consentimento
+    └── onboarding/  consentimento
+```
 
 | Escolha | Por quê |
 |---|---|
-| Flutter + Material 3 | Requisito da disciplina; `ThemeExtension` para cores semânticas nos 3 temas |
-| flutter_riverpod | Estado global (dados, alertas, registros, limiares) separado do local (formulários, período); `AsyncValue` dá carregando/erro/dados |
-| go_router (`StatefulShellRoute`) | Rotas nomeadas com parâmetros (`/indicadores/:aba`, `/alertas/:id`, `/ocorrencias/:protocol/enviada`) e 4 abas que preservam o estado |
-| dio | Timeout e erros tipados nas fontes remotas |
-| shared_preferences | Preferências, consentimento, limiares, decisões, registros e caches |
-| Domínio em Dart puro | Faixas, previsão, confiança, motor de alertas, backtest e validações testados sem Flutter |
+| **Flutter + Material 3** | Requisito da disciplina; `ThemeExtension` para cores semânticas nos 3 temas |
+| **flutter_riverpod** | Estado global (dados, alertas, registros, limiares) separado do local (formulários, período); `AsyncValue` dá carregando/erro/dados |
+| **go_router** (`StatefulShellRoute`) | Rotas nomeadas com parâmetros (`/indicadores/:aba`, `/alertas/:id`, `/ocorrencias/:protocol/enviada`) e abas que preservam o estado |
+| **dio** | Timeout e erros tipados nas fontes remotas |
+| **shared_preferences** | Preferências, consentimento, limiares, decisões, registros e caches |
+| **Domínio em Dart puro** | Faixas, previsão, confiança, alertas, backtest e validações testados sem Flutter |
+| **Fonte Inter embutida** | Fiel ao design system e funciona offline |
 
-Estrutura: `lib/core` (tema, utilitários, resultado de dados), `lib/shared/widgets` (componentes), `lib/features/<feature>/{domain,data,presentation}`. Detalhes em [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+Mais detalhes em [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Design no Figma: *PULSO — Radar Territorial* (página "05 · Handoff Flutter").
 
-## Testes
-
-63 testes (`flutter test`), incluindo:
-
-- motor de alertas, confiança, previsão, backtest (com resultado da série real), detector de dados pessoais, validações e repositórios;
-- fluxo de consentimento, visão geral e aviso de mudança de faixa;
-- **cada tela em 360 px com texto 200% e alto contraste** (qualquer estouro de layout reprova) e diretrizes de alvo de toque rotulado e ≥ 48 dp.
+## 🧪 Testes
 
 ```bash
 flutter analyze   # sem avisos
 flutter test      # 63 testes
 ```
 
-## Como executar
+| Grupo | Cobre |
+|---|---|
+| Domínio | Faixas, motor de alertas, confiança, previsão, backtest (com o resultado da série real), validações |
+| Dados | Repositório com fallback, cache corrompido, leitura da Open-Meteo |
+| Privacidade | Detector e mascaramento de dados pessoais |
+| Telas | Consentimento, visão geral, aviso de mudança de faixa |
+| Acessibilidade | **Cada tela em 360 px com texto 200 % e alto contraste** (qualquer estouro reprova) e alvos de toque rotulados e ≥ 48 dp |
 
-Requer Flutter 3.35+ (testado em 3.47.9).
+## ▶️ Como executar
+
+**Pré-requisito:** Flutter 3.35 ou superior (testado em 3.47.9). Nenhuma chave de API é necessária.
 
 ```bash
-git clone https://github.com/JoaoVictorAAbreu-Dev/gs-2026-cpad && cd gs-2026-cpad
+git clone https://github.com/JoaoVictorAAbreu-Dev/gs-2026-cpad
+cd gs-2026-cpad
 flutter pub get
-flutter run                 # Android, iOS, web ou Linux; usa o pacote embutido
+flutter run          # Android, iOS, web ou Linux, com os dados embutidos
+```
+
+Opcional, para buscar o pacote de dados de uma URL:
+
+```bash
 flutter run --dart-define=PULSO_DATA_URL=https://<usuario>.github.io/pulso-data/pulso_data.json
 ```
 
-Nenhuma chave de API é necessária. Para a demonstração offline: Configurações › "Simular sem internet".
+Para demonstrar o modo offline: Configurações › **Simular sem internet**.
 
-## Vídeo
+## 🎬 Vídeo de demonstração
 
-_Link pendente._ Roteiro em [`docs/VIDEO.md`](docs/VIDEO.md).
+> _Link pendente._ Roteiro com cenas e tempos em [`docs/VIDEO.md`](docs/VIDEO.md).
 
-## Documentação do planejamento
+## ✅ Atendimento à rubrica
 
-Requisitos da rubrica, checklist de entrega e progresso em [`docs/`](docs/REQUIREMENTS.md).
+| Requisito | Onde está |
+|---|---|
+| Ao menos 5 telas, rotas nomeadas e passagem de parâmetros | 13 telas; `/indicadores/:aba`, `/alertas/:id`, `/ocorrencias/:protocol/enviada`, `?regiao=` |
+| 3 dashboards com gráficos, histórico e tendência | Recursos, Clima e Serviços |
+| Alertas com evidência, confiança, limitações e decisão humana | Alertas → detalhe → encaminhar |
+| Estado local/global compartilhado entre telas | `alertsProvider` (4 telas), `reportsProvider` (3 telas) |
+| API real ou simulada, persistência local e uso offline | Open-Meteo, API de envio simulada, cache e fila offline |
+| Formulário com validação | Registro de ocorrência (4 etapas) e Limiares |
+| Tema e componentes reutilizáveis, responsividade | Tokens do Figma, `lib/shared/widgets`, testes em 360 e 390 px |
+| Contraste, fonte ampliada e leitor de tela | Alto contraste, texto 200 %, `Semantics`, ver como tabela |
+| Anonimização, consentimento e benefício social | Detector de dados pessoais, consentimento, backtest de antecedência |
 
-## Licença
+Planejamento, requisitos e checklist de entrega em [`docs/`](docs/REQUIREMENTS.md).
 
-Projeto acadêmico — FIAP, Global Solution 2026.2. Fonte Inter sob SIL Open Font License 1.1 (`assets/fonts/inter/LICENSE-OFL.txt`). Dados do Cantareira: Sabesp, com atribuição.
+---
+
+<div align="center">
+<sub>Projeto acadêmico — FIAP, Global Solution 2026.2 · Dados do Cantareira: Sabesp, com atribuição · Previsão do tempo: Open-Meteo · Fonte Inter: SIL Open Font License 1.1</sub>
+</div>
