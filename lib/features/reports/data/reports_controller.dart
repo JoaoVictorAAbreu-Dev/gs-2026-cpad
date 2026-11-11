@@ -16,7 +16,7 @@ final reportApiProvider = Provider<ReportApi>(
 );
 
 /// Registros do cidadão, persistidos no aparelho. Compartilhado por:
-/// formulário, sucesso, Meus registros e indicadores de Serviços.
+/// formulário, sucesso, Meus registros e Configurações.
 class ReportsController extends Notifier<List<Report>> {
   static const _key = 'reports.v1';
 

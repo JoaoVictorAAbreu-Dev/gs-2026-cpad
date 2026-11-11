@@ -19,7 +19,7 @@ class ReportStatusTimeline extends StatelessWidget {
         sent ? 'Enviado para a equipe.' : 'Acontece sozinho quando houver internet.',
         sent,
       ),
-      ('Triagem por uma pessoa da equipe', 'O registro entra nos indicadores de Serviços.', status == ReportStatus.triaged),
+      ('Triagem por uma pessoa da equipe', 'O registro entra no dashboard Risco territorial.', status == ReportStatus.triaged),
       ('Resposta', 'Acompanhe em Meus registros.', false),
     ];
     final text = Theme.of(context).textTheme;
