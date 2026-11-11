@@ -3,11 +3,13 @@
 - 05/11/2026: PDF oficial lido; requisitos e prazo registrados.
 - 10/11/2026: app Flutter iniciado (tema, motor de alertas, dados com fallback, telas principais).
 - 11/11/2026: registro de ocorrência em 4 etapas, Meus registros com fila offline, cartograma hexagonal.
-  `flutter analyze` sem avisos e testes passando (Flutter 3.47.9). Telas revisadas no navegador em 390×844.
+- 11/11/2026: dados reais do Cantareira (via DSA) + previsão Ridge, benefício social por backtest, Open-Meteo,
+  aviso de mudança de faixa, fonte Inter embutida, testes de layout em 360 px / 200% / alto contraste,
+  prints no README e roteiro do vídeo. `flutter analyze` sem avisos; 63 testes passando.
 
-## Pendente
+## Pendente (depende do aluno)
 
-- Pacote de dados real do pipeline DSA (hoje o app usa série sintética, rotulada como tal).
-- Previsão do tempo (Open-Meteo) na aba Clima e notificação local na mudança de faixa.
-- Verificar em emulador Android (mobile-mcp), em 360 px, texto 200% e leitor de tela.
-- Prints no README, vídeo de até 3 min, APK em Releases, tornar o repositório público.
+- Gravar o vídeo (roteiro em `docs/VIDEO.md`) e colocar o link no README.
+- Tornar o repositório público antes de enviar o `.txt` (19/11/2026, 23h55).
+- Opcional: APK em Releases e verificação em emulador Android (exige Android SDK, ~7 GB).
+- Notificação push na mudança de faixa ficou como aviso dentro do app (sem plugin nativo).
