@@ -7,8 +7,8 @@ e a narração por cena. Cada cena cita o critério da rubrica que demonstra.
 |---|---|---|---|
 | 1 | 0:00–0:15 | Consentimento → aceitar | Problema, privacidade e consentimento |
 | 2 | 0:15–0:40 | Visão geral: 52,9 %, faixa, "o que isso significa", gráfico com previsão, aviso de dados com mais de 3 dias | Dados reais, estados de interface |
-| 3 | 0:40–1:05 | Indicadores: Recursos (fatores da previsão, erro do modelo) → Clima (Open-Meteo) → Serviços (benefício social) | 3 dashboards, API externa, benefício social |
-| 4 | 1:05–1:30 | Alertas → detalhe: risco × confiança, evidências, limitações, regra → Encaminhar | Alertas transparentes, decisão humana, rota com parâmetro |
+| 3 | 0:40–1:05 | Dashboards: Água (tendência, histórico mensal) → Clima (chuva semanal e mensal, Open-Meteo) → Risco territorial (histórico, ranking, benefício social) | 3 dashboards, API externa, benefício social |
+| 4 | 1:05–1:30 | Risco › Detalhe do indicador Registros → alerta Zona Leste 2 → janela, risco × confiança, evidências, limitações, "Como calculamos a confiança" → Encaminhar | Fluxo visão geral → indicador → alerta → justificativa, decisão humana |
 | 5 | 1:30–1:50 | Configurações → Limiares: erro de validação → limiar 55 % → novo alerta aparece | Formulário com validação, estado compartilhado |
 | 6 | 1:50–2:20 | Mapa → Zona Leste 2 → Registrar aqui → 4 etapas (telefone é removido) → sucesso → Simular sem internet → Meus registros "Aguardando internet" | Formulário, anonimização, persistência e offline |
 | 7 | 2:20–2:40 | Alto contraste + texto 200 % + "Ver como tabela" | Acessibilidade |
@@ -24,12 +24,12 @@ Antes de tudo, a pessoa vê o que guardamos e o que nunca pedimos.
 um ano atrás. A frase explica o que isso significa para quem mora aqui. O gráfico mostra a previsão para 7 dias com a faixa
 de erro. Como o último dado tem mais de três dias, o app avisa e reduz a confiança das previsões.
 
-**3 — Indicadores.** Em Recursos, a previsão vem do mesmo modelo Ridge do nosso projeto de dados, e o app mostra quanto cada
+**3 — Dashboards.** Em Água, a previsão vem do mesmo modelo Ridge do nosso projeto de dados, e o app mostra quanto cada
 fator pesou e quanto o modelo erra. Em Clima, chuva da bacia e a previsão do tempo da Open-Meteo, com cópia salva para usar
-sem internet. Em Serviços, o benefício social: reexecutamos a regra de alerta em todo o histórico e ela teria avisado as seis
+sem internet. Em Risco territorial, o histórico de registros por região e o benefício social: reexecutamos a regra de alerta em todo o histórico e ela teria avisado as seis
 pioras de faixa, com 5,8 dias de antecedência em média.
 
-**4 — Alertas.** Cada alerta separa risco e confiança, mostra as evidências, as limitações e a regra usada. O app nunca age
+**4 — Alertas.** Do detalhe do indicador chego ao alerta. Cada alerta mostra a janela de tempo, separa risco e confiança, explica como a confiança foi calculada e quando ela cai, e lista evidências e limitações. O app nunca age
 sozinho: a pessoa encaminha para análise humana e a decisão fica registrada.
 
 **5 — Limiares.** O gestor define quando o app deve avisar. Valor inválido é recusado com uma mensagem clara. Com um limiar de

@@ -1,0 +1,9 @@
+=== GLOBAL SOLUTION 2026.2 ===
+Disciplina: Cross-Platform Application Development
+Desafio: Territory Predictive Insights
+
+Integrante 1: João Victor Alves de Abreu | RM: 564946
+Integrante 2: Rodrigo Kenshin Viana Matayoshi | RM: 564026
+
+GitHub: https://github.com/JoaoVictorAAbreu-Dev/gs-2026-cpad
+Vídeo: PREENCHER_COM_O_LINK_PUBLICO_DO_VIDEO
