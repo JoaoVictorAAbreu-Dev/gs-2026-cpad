@@ -8,6 +8,9 @@ import '../features/home/home_screen.dart';
 import '../features/indicators/indicators_screen.dart';
 import '../features/map/map_screen.dart';
 import '../features/onboarding/consent_screen.dart';
+import '../features/reports/presentation/my_reports_screen.dart';
+import '../features/reports/presentation/report_form_screen.dart';
+import '../features/reports/presentation/report_success_screen.dart';
 import '../features/settings/settings_controller.dart';
 import '../features/settings/settings_screen.dart';
 import '../features/settings/thresholds_screen.dart';
@@ -23,6 +26,9 @@ abstract final class Routes {
   static const settings = 'settings';
   static const thresholds = 'thresholds';
   static const consent = 'consent';
+  static const myReports = 'myReports';
+  static const newReport = 'newReport';
+  static const reportSuccess = 'reportSuccess';
 }
 
 final _rootKey = GlobalKey<NavigatorState>();
@@ -75,6 +81,26 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: Routes.alertDetail,
         parentNavigatorKey: _rootKey,
         builder: (context, state) => AlertDetailScreen(alertId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/ocorrencias',
+        name: Routes.myReports,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const MyReportsScreen(),
+        routes: [
+          GoRoute(
+            path: 'nova',
+            name: Routes.newReport,
+            parentNavigatorKey: _rootKey,
+            builder: (context, state) => ReportFormScreen(initialRegionId: state.uri.queryParameters['regiao']),
+          ),
+          GoRoute(
+            path: ':protocol/enviada',
+            name: Routes.reportSuccess,
+            parentNavigatorKey: _rootKey,
+            builder: (context, state) => ReportSuccessScreen(protocol: state.pathParameters['protocol']!),
+          ),
+        ],
       ),
       GoRoute(
         path: '/configuracoes',

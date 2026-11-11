@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../app/providers.dart';
 import '../../core/theme/themes.dart';
+import '../reports/data/reports_controller.dart';
 
 /// Versão do texto de consentimento. Mudou o texto → pede consentimento de novo.
 const kConsentVersion = 1;
@@ -116,7 +117,8 @@ class SettingsController extends Notifier<AppSettings> {
       ..invalidateSelf()
       ..invalidate(thresholdsProvider)
       ..invalidate(decisionsProvider)
-      ..invalidate(territoryProvider);
+      ..invalidate(territoryProvider)
+      ..invalidate(reportsProvider);
   }
 
   SharedPreferences get _prefs => ref.read(sharedPreferencesProvider);

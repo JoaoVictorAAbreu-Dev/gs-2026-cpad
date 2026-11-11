@@ -6,6 +6,7 @@ import '../../app/router.dart';
 import '../../core/theme/pulso_colors.dart';
 import '../../core/theme/themes.dart';
 import '../../core/theme/tokens.dart';
+import '../reports/data/reports_controller.dart';
 import 'settings_controller.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -83,6 +84,17 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: const Text('Frases curtas, sem termos técnicos.'),
                   value: s.simpleReading,
                   onChanged: ctrl.setSimpleReading,
+                ),
+                SwitchListTile(
+                  title: const Text('Simular sem internet'),
+                  subtitle: const Text('Demonstração: novos registros ficam na fila até religar.'),
+                  value: !ref.watch(simulatedOnlineProvider),
+                  onChanged: (offline) => ref.read(simulatedOnlineProvider.notifier).state = !offline,
+                ),
+                ListTile(
+                  title: const Text('Meus registros'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.pushNamed(Routes.myReports),
                 ),
                 ListTile(
                   title: const Text('Limiares de alerta'),
