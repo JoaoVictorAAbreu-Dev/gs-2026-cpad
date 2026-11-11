@@ -1,4 +1,4 @@
-Integrantes: João Victor Alves de Abreu (RM 564946) e Rodrigo Kenshin Viana Matayoshi (RM 564026).
+**Integrantes:** João Victor Alves de Abreu (RM 564946) e Rodrigo Kenshin Viana Matayoshi (RM 564026).
 
 <div align="center">
 
@@ -8,23 +8,11 @@ Integrantes: João Victor Alves de Abreu (RM 564946) e Rodrigo Kenshin Viana Mat
 
 Global Solution 2026.2 · Cross-Platform Application Development · FIAP — *Territory Predictive Insights*
 
-<br>
+![Flutter](https://img.shields.io/badge/Flutter-3.47.9-02569B?logo=flutter&logoColor=white) ![Dart](https://img.shields.io/badge/Dart-3.13-0175C2?logo=dart&logoColor=white) ![Material 3](https://img.shields.io/badge/Material-3-757575?logo=materialdesign&logoColor=white) ![Riverpod](https://img.shields.io/badge/Riverpod-2.6-00B4AB) ![go_router](https://img.shields.io/badge/go__router-14.6-4A90D9)
 
-![Flutter](https://img.shields.io/badge/Flutter-3.47.9-02569B?logo=flutter&logoColor=white)
-![Dart](https://img.shields.io/badge/Dart-3.13-0175C2?logo=dart&logoColor=white)
-![Material 3](https://img.shields.io/badge/Material-3-757575?logo=materialdesign&logoColor=white)
-![Riverpod](https://img.shields.io/badge/Riverpod-2.6-00B4AB)
-![go_router](https://img.shields.io/badge/go__router-14.6-4A90D9)
-<br>
-![Testes](https://img.shields.io/badge/testes-63%20passando-2EA44F?logo=checkmarx&logoColor=white)
-![flutter analyze](https://img.shields.io/badge/flutter%20analyze-sem%20avisos-2EA44F)
-![Acessibilidade](https://img.shields.io/badge/acessibilidade-texto%20200%25%20%C2%B7%20alto%20contraste-6A1B9A)
-![Plataformas](https://img.shields.io/badge/plataformas-Android%20%C2%B7%20iOS%20%C2%B7%20Web%20%C2%B7%20Linux-455A64)
-<br>
-![Dados](https://img.shields.io/badge/dados-Sabesp%20%E2%80%94%20reais-0B6E5A)
-![Clima](https://img.shields.io/badge/clima-Open--Meteo-F57C00)
-![Benefício social](https://img.shields.io/badge/anteced%C3%AAncia%20m%C3%A9dia-5%2C8%20dias-B4233A)
-![Licença](https://img.shields.io/badge/uso-acad%C3%AAmico-lightgrey)
+![Testes](https://img.shields.io/badge/testes-63%20passando-2EA44F?logo=checkmarx&logoColor=white) ![flutter analyze](https://img.shields.io/badge/flutter%20analyze-sem%20avisos-2EA44F) ![Acessibilidade](https://img.shields.io/badge/acessibilidade-texto%20200%25%20%C2%B7%20alto%20contraste-6A1B9A) ![Plataformas](https://img.shields.io/badge/plataformas-Android%20%C2%B7%20iOS%20%C2%B7%20Web%20%C2%B7%20Linux-455A64)
+
+![Dados](https://img.shields.io/badge/dados-Sabesp%20%E2%80%94%20reais-0B6E5A) ![Clima](https://img.shields.io/badge/clima-Open--Meteo-F57C00) ![Benefício social](https://img.shields.io/badge/anteced%C3%AAncia%20m%C3%A9dia-5%2C8%20dias-B4233A) ![Licença](https://img.shields.io/badge/uso-acad%C3%AAmico-lightgrey)
 
 </div>
 
