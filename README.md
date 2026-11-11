@@ -16,13 +16,6 @@ Global Solution 2026.2 · Cross-Platform Application Development · FIAP — *Te
 
 </div>
 
-## 👥 Integrantes
-
-| Nome | RM |
-|---|---|
-| **João Victor Alves de Abreu** | 564946 |
-| **Rodrigo Kenshin Viana Matayoshi** | 564026 |
-
 ## 📑 Sumário
 
 1. [Problema e público](#-problema-e-público)
