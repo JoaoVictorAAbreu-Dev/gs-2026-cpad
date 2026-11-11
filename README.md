@@ -12,7 +12,7 @@ Global Solution 2026.2 · Cross-Platform Application Development · FIAP · Desa
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.47.9-02569B?logo=flutter&logoColor=white) ![Dart](https://img.shields.io/badge/Dart-3.13-0175C2?logo=dart&logoColor=white) ![Material 3](https://img.shields.io/badge/Material-3-757575?logo=materialdesign&logoColor=white) ![Riverpod](https://img.shields.io/badge/Riverpod-2.6-00B4AB) ![go_router](https://img.shields.io/badge/go__router-14.6-4A90D9) ![flutter_map](https://img.shields.io/badge/flutter__map-8.3-4C9A2A)
 
-![Testes](https://img.shields.io/badge/testes-87%20passando-2EA44F) ![flutter analyze](https://img.shields.io/badge/flutter%20analyze-sem%20avisos-2EA44F) ![Acessibilidade](https://img.shields.io/badge/acessibilidade-texto%20200%25%20%C2%B7%20alto%20contraste-6A1B9A) ![Plataformas](https://img.shields.io/badge/plataformas-Android%20%C2%B7%20iOS%20%C2%B7%20Web%20%C2%B7%20Linux-455A64)
+![Testes](https://img.shields.io/badge/testes-82%20passando-2EA44F) ![flutter analyze](https://img.shields.io/badge/flutter%20analyze-sem%20avisos-2EA44F) ![Acessibilidade](https://img.shields.io/badge/acessibilidade-texto%20200%25%20%C2%B7%20alto%20contraste-6A1B9A) ![Plataformas](https://img.shields.io/badge/plataformas-Android%20%C2%B7%20iOS%20%C2%B7%20Web%20%C2%B7%20Linux-455A64)
 
 ![Dados](https://img.shields.io/badge/volume%20e%20chuva-Sabesp%20(reais)-0B6E5A) ![Clima](https://img.shields.io/badge/clima-Open--Meteo%20(API%20real)-F57C00) ![Mapa](https://img.shields.io/badge/mapa-OpenStreetMap-7EBC6F?logo=openstreetmap&logoColor=white) ![Ocorrências](https://img.shields.io/badge/ocorr%C3%AAncias-sint%C3%A9ticas-8E7CC3) ![Licença](https://img.shields.io/badge/uso-acad%C3%AAmico-lightgrey)
 
@@ -319,7 +319,7 @@ flutter run -d chrome           # ou no navegador
 
 ```bash
 flutter analyze   # sem avisos
-flutter test      # 87 testes
+flutter test      # 82 testes
 ```
 
 ### 9.4 Configuração opcional
