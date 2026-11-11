@@ -56,8 +56,8 @@ class OsmTerritoryMap extends ConsumerWidget {
           child: FlutterMap(
             options: MapOptions(
               // Centro entre as represas (norte) e as regiões da RMSP (sul); zoom que mostra os dois.
-              initialCenter: const LatLng(-23.33, -46.52),
-              initialZoom: 8.6,
+              initialCenter: const LatLng(-23.34, -46.55),
+              initialZoom: 9,
               minZoom: 7,
               maxZoom: 15,
               backgroundColor: scheme.surfaceContainerHighest,
@@ -84,8 +84,8 @@ class OsmTerritoryMap extends ConsumerWidget {
                   for (final r in withCoords)
                     Marker(
                       point: LatLng(r.lat!, r.lon!),
-                      width: 52,
-                      height: 52,
+                      width: 46,
+                      height: 46,
                       child: _RegionPin(region: r, severity: severityOf(r), onTap: () => onTap(r), colors: c),
                     ),
                 ],
