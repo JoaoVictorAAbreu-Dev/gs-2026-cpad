@@ -149,6 +149,7 @@ class _Body extends ConsumerWidget {
         const SizedBox(height: PulsoSpacing.sm),
         _Expandable(
           title: 'Como calculamos a confiança',
+          initiallyExpanded: true,
           children: [
             Text(method.how, style: text.bodyMedium),
             const SizedBox(height: PulsoSpacing.sm),
