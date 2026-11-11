@@ -5,7 +5,7 @@ Texto para gravar com a sua voz sobre o vídeo `PULSO-demo.mp4` (2:41, legendado
 ## Como gravar
 
 1. Abra o vídeo sem som e um gravador de áudio ao lado (celular, Audacity ou o gravador do sistema).
-2. Leia cada fala quando a cena começar; o número da cena aparece no canto da tela (01 / 12…). Pausas entre as falas são bem-vindas.
+2. Leia cada fala quando a cena começar, guiando-se pela coluna Tempo (na tela, as cenas 2 a 13 da tabela aparecem como 01 / 12 a 12 / 12). Pausas entre as falas são bem-vindas.
 3. Pode gravar tudo de uma vez ou uma fala por arquivo (`01.m4a`, `02.m4a`…). Em lugar silencioso, a um palmo do microfone.
 4. Envie o áudio: o alinhamento com as cenas, a limpeza do ruído e a junção com o vídeo ficam por conta da montagem.
 
