@@ -220,7 +220,7 @@ class _BarPainter extends CustomPainter {
 
   static const leftPad = 40.0;
   static const bottomPad = 18.0;
-  static const topPad = 14.0;
+  static const topPad = 28.0;
 
   final List<BarDatum> data;
   final String unit;
@@ -259,7 +259,7 @@ class _BarPainter extends CustomPainter {
     if (maxV <= minY) maxV = minY + 1;
     // Teto "redondo" para as linhas de grade.
     final span = maxV - minY;
-    final step = _niceStep(span / 3);
+    final step = _niceStep(span / 4);
     final top = minY + (span / step).ceil() * step;
 
     final plot = Rect.fromLTRB(leftPad, topPad, size.width, size.height - bottomPad);
@@ -272,7 +272,7 @@ class _BarPainter extends CustomPainter {
       canvas.drawLine(Offset(plot.left, y(v)), Offset(plot.right, y(v)), grid);
       _text(canvas, _axis(v), Offset(plot.left - 6, y(v) - 7), align: TextAlign.right, maxW: leftPad - 6);
     }
-    _text(canvas, unit, const Offset(0, -2), maxW: leftPad + 40);
+    _text(canvas, unit, Offset.zero, maxW: size.width);
 
     final n = data.length;
     final slot = plot.width / n;
@@ -334,7 +334,7 @@ class _BarPainter extends CustomPainter {
     if (raw <= 0) return 1;
     final mag = math.pow(10, (math.log(raw) / math.ln10).floor()).toDouble();
     final f = raw / mag;
-    final nice = f <= 1 ? 1 : (f <= 2 ? 2 : (f <= 5 ? 5 : 10));
+    final nice = f <= 1 ? 1 : (f <= 2 ? 2 : (f <= 2.5 ? 2.5 : (f <= 5 ? 5 : 10)));
     return nice * mag;
   }
 
