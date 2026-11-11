@@ -58,6 +58,8 @@ class _IndicatorsScreenState extends ConsumerState<IndicatorsScreen> {
             showSelectedIcon: false,
             onSelectionChanged: (s) => context.goNamed(Routes.indicators, pathParameters: {'aba': s.first.slug}),
           ),
+          // O período não se aplica a Serviços (janela fixa de 7 dias dos registros).
+          if (widget.tab != IndicatorTab.services) ...[
           const SizedBox(height: PulsoSpacing.md),
           SegmentedButton<int>(
             segments: const [
@@ -69,6 +71,7 @@ class _IndicatorsScreenState extends ConsumerState<IndicatorsScreen> {
             showSelectedIcon: false,
             onSelectionChanged: (s) => setState(() => _days = s.first),
           ),
+          ],
           const SizedBox(height: PulsoSpacing.md),
           ...switch (widget.tab) {
             IndicatorTab.resources => reservoir.when<List<Widget>>(
@@ -263,8 +266,8 @@ class _ServicesTab extends StatelessWidget {
     if (regions.isEmpty) {
       return const EmptyState(title: 'Sem dados de serviços', message: 'O pacote de dados não trouxe regiões.');
     }
-    final sorted = [...regions]..sort((a, b) => b.reportsPer10k.compareTo(a.reportsPer10k));
-    final maxRate = sorted.first.reportsPer10k;
+    final sorted = [...regions]..sort((a, b) => b.reportsPer100k.compareTo(a.reportsPer100k));
+    final maxRate = sorted.first.reportsPer100k;
 
     return Card(
       child: Padding(
@@ -272,13 +275,13 @@ class _ServicesTab extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Registros por 10 mil habitantes · 7 dias', style: text.titleMedium),
+            Text('Registros por 100 mil habitantes · últimos 7 dias', style: text.titleMedium),
             const SizedBox(height: PulsoSpacing.xs),
             DataSourceTag(real: !regions.first.synthetic),
             const SizedBox(height: PulsoSpacing.md12),
             for (final r in sorted)
               Semantics(
-                label: '${r.name}: ${Fmt.number(r.reportsPer10k)} registros por 10 mil habitantes',
+                label: '${r.name}: ${Fmt.number(r.reportsPer100k)} registros por 100 mil habitantes',
                 excludeSemantics: true,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: PulsoSpacing.sm),
@@ -288,7 +291,7 @@ class _ServicesTab extends StatelessWidget {
                       Expanded(
                         flex: 5,
                         child: LinearProgressIndicator(
-                          value: maxRate == 0 ? 0 : r.reportsPer10k / maxRate,
+                          value: maxRate == 0 ? 0 : r.reportsPer100k / maxRate,
                           minHeight: 10,
                           borderRadius: BorderRadius.circular(5),
                           color: r == sorted.first ? c.forecast : c.muted,
@@ -296,7 +299,7 @@ class _ServicesTab extends StatelessWidget {
                       ),
                       SizedBox(
                         width: 44,
-                        child: Text(Fmt.number(r.reportsPer10k), textAlign: TextAlign.end, style: text.labelLarge),
+                        child: Text(Fmt.number(r.reportsPer100k), textAlign: TextAlign.end, style: text.labelLarge),
                       ),
                     ],
                   ),

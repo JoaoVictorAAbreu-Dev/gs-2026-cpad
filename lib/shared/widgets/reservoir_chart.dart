@@ -250,7 +250,11 @@ class _ChartPainter extends CustomPainter {
     }
     // Eixo X: primeira e última data observadas (+ data da previsão).
     _text(canvas, Fmt.dayMonth(points.first.date), Offset(plot.left, plot.bottom + 4), colors.muted);
-    _text(canvas, Fmt.dayMonth(points.last.date), Offset(xOf(points.length - 1) - 30, plot.bottom + 4), colors.muted);
+    // Só desenha a data do último ponto observado se não colidir com a data da previsão.
+    final lastX = xOf(points.length - 1);
+    if (f == null || xOf(slots) - lastX > 44) {
+      _text(canvas, Fmt.dayMonth(points.last.date), Offset(lastX - 30, plot.bottom + 4), colors.muted);
+    }
 
     // Previsão: faixa de erro + linha tracejada.
     if (f != null && progress > 0.6) {

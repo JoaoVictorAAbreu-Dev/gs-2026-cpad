@@ -27,7 +27,8 @@ class Region {
   final double population10k;
   final bool synthetic;
 
-  double get reportsPer10k => population10k == 0 ? 0 : lastWeek / population10k;
+  /// Registros da última semana por 100 mil habitantes (população vem em dezenas de milhares).
+  double get reportsPer100k => population10k == 0 ? 0 : lastWeek / population10k * 10;
 
   RegionActivity toActivity() => RegionActivity(
         regionId: id,

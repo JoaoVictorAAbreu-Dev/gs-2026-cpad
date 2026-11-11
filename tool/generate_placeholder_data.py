@@ -11,7 +11,7 @@ from datetime import date, timedelta
 
 random.seed(2026)
 END = date(2026, 11, 9)
-DAYS = 365
+DAYS = 400
 
 series = []
 for i in range(DAYS):
