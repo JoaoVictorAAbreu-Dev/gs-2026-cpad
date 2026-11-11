@@ -6,8 +6,6 @@
 
 **Aplicativo Flutter que antecipa a mudança de faixa do Sistema Cantareira e mostra, em cada alerta, a evidência, a confiança, a janela da previsão e os limites. O alerta apoia a análise; a decisão final é sempre humana.**
 
-**Integrantes:** João Victor Alves de Abreu (RM 564946) e Rodrigo Kenshin Viana Matayoshi (RM 564026)
-
 Global Solution 2026.2 · Cross-Platform Application Development · FIAP · Desafio *Territory Predictive Insights*
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.47.9-02569B?logo=flutter&logoColor=white) ![Dart](https://img.shields.io/badge/Dart-3.13-0175C2?logo=dart&logoColor=white) ![Material 3](https://img.shields.io/badge/Material-3-757575?logo=materialdesign&logoColor=white) ![Riverpod](https://img.shields.io/badge/Riverpod-2.6-00B4AB) ![go_router](https://img.shields.io/badge/go__router-14.6-4A90D9) ![flutter_map](https://img.shields.io/badge/flutter__map-8.3-4C9A2A)
