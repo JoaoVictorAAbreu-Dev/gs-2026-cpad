@@ -1,41 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pulso/app/app.dart';
-import 'package:pulso/app/providers.dart';
-import 'package:pulso/features/reservoir/data/territory_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> pumpApp(WidgetTester tester, Map<String, Object> prefs) async {
-  SharedPreferences.setMockInitialValues(prefs);
-  final instance = await SharedPreferences.getInstance();
-  await tester.pumpWidget(
-    ProviderScope(
-      overrides: [
-        sharedPreferencesProvider.overrideWithValue(instance),
-        // I/O real (rootBundle lendo do disco) não completa no relógio simulado do teste:
-        // injeta o pacote embutido lido de forma síncrona.
-        territoryRepositoryProvider.overrideWithValue(
-          TerritoryRepository(
-            prefs: instance,
-            remoteUrl: '',
-            loadAsset: (_) => Future.value(File('assets/data/pulso_data.json').readAsStringSync()),
-          ),
-        ),
-        // Dia seguinte ao último dado do pacote: dados "frescos".
-        clockProvider.overrideWithValue(() => DateTime(2026, 11, 10, 9)),
-      ],
-      child: const PulsoApp(),
-    ),
-  );
-  await tester.pumpAndSettle();
-}
+import 'helpers/pump_app.dart';
 
 void main() {
   testWidgets('sem consentimento, mostra a tela de consentimento com botão desabilitado', (tester) async {
-    await pumpApp(tester, {});
+    await pumpApp(tester);
     expect(find.text('Seus dados, suas regras'), findsOneWidget);
     // A lista é preguiçosa: rola até o fim para o botão ser montado.
     await tester.scrollUntilVisible(find.text('Aceitar e continuar'), 200, scrollable: find.byType(Scrollable).first);
@@ -50,15 +20,25 @@ void main() {
     expect(find.text('Cantareira · volume útil'), findsOneWidget);
   });
 
-  testWidgets('com consentimento, abre a visão geral com aviso de decisão humana', (tester) async {
-    await pumpApp(tester, {'consent.version': 1});
+  testWidgets('com consentimento, abre a visão geral com dados reais e aviso de decisão humana', (tester) async {
+    await pumpApp(tester, prefs: {'consent.version': 1});
     expect(find.text('Cantareira · volume útil'), findsOneWidget);
-    expect(find.text('DADOS SINTÉTICOS'), findsWidgets);
+    expect(find.text('52,9%'), findsOneWidget);
+    expect(find.text('DADOS REAIS'), findsWidgets);
     await tester.scrollUntilVisible(
       find.textContaining('decisão final é sempre de uma pessoa'),
       300,
       scrollable: find.byType(Scrollable).first,
     );
     expect(find.textContaining('decisão final é sempre de uma pessoa'), findsWidgets);
+  });
+
+  testWidgets('avisa quando a faixa mudou desde a última visita', (tester) async {
+    await pumpApp(tester, prefs: {'consent.version': 1, 'band.lastSeen': 'restriction'});
+    expect(find.text('A faixa mudou desde sua última visita'), findsOneWidget);
+    expect(find.textContaining('Restrição → Atenção'), findsOneWidget);
+    await tester.tap(find.text('Entendi'));
+    await tester.pumpAndSettle();
+    expect(find.text('A faixa mudou desde sua última visita'), findsNothing);
   });
 }

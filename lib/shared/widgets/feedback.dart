@@ -49,8 +49,10 @@ class InfoBanner extends StatelessWidget {
     this.tone = BannerTone.warning,
     this.actionLabel,
     this.onAction,
+    this.actionIcon = Icons.refresh,
   });
 
+  final IconData actionIcon;
   final IconData icon;
   final String title;
   final String message;
@@ -89,7 +91,7 @@ class InfoBanner extends StatelessWidget {
                 padding: const EdgeInsets.only(top: PulsoSpacing.sm),
                 child: TextButton.icon(
                   onPressed: onAction,
-                  icon: const Icon(Icons.refresh, size: 18),
+                  icon: Icon(actionIcon, size: 18),
                   label: Text(actionLabel!),
                 ),
               ),

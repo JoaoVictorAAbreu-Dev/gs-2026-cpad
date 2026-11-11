@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,8 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../core/result/data_result.dart';
 import '../features/alerts/domain/alert.dart';
 import '../features/alerts/domain/alert_engine.dart';
+import '../features/alerts/domain/lead_time_backtest.dart';
 import '../features/reservoir/data/territory_data.dart';
 import '../features/reservoir/data/territory_repository.dart';
+import '../features/reservoir/domain/operating_band.dart';
 import '../features/reservoir/domain/reservoir_models.dart';
 import '../features/reservoir/domain/trend_forecaster.dart';
 
@@ -159,3 +162,49 @@ final decisionsProvider = NotifierProvider<DecisionsController, List<HumanDecisi
 
 Map<String, dynamic> _decode(String raw) => jsonDecode(raw) as Map<String, dynamic>;
 String _encode(Map<String, dynamic> v) => jsonEncode(v);
+
+// ── Benefício social (backtest da regra de alerta sobre a série) ──────────────
+final socialImpactProvider = Provider<LeadTimeResult?>((ref) {
+  final r = ref.watch(reservoirProvider).valueOrNull?.data;
+  if (r == null) return null;
+  return const LeadTimeBacktest().run(r.series);
+});
+
+// ── Mudança de faixa desde a última visita ──────────────────────────────────
+class BandChange {
+  const BandChange({required this.from, required this.to});
+  final OperatingBand from;
+  final OperatingBand to;
+  bool get improved => to.level < from.level;
+}
+
+/// Compara a faixa atual com a última faixa vista neste aparelho.
+/// A tela chama `markSeen()` depois de mostrar o aviso.
+class BandChangeController extends Notifier<BandChange?> {
+  static const _key = 'band.lastSeen';
+
+  @override
+  BandChange? build() {
+    final current = ref.watch(reservoirProvider).valueOrNull?.data.latest.band;
+    if (current == null) return null;
+    final prefs = ref.watch(sharedPreferencesProvider);
+    final last = prefs.getString(_key);
+    if (last == null) {
+      // Primeira visita: registra sem avisar.
+      unawaited(prefs.setString(_key, current.name));
+      return null;
+    }
+    final previous = OperatingBand.values.where((b) => b.name == last).firstOrNull;
+    if (previous == null || previous == current) return null;
+    return BandChange(from: previous, to: current);
+  }
+
+  Future<void> markSeen() async {
+    final current = ref.read(reservoirProvider).valueOrNull?.data.latest.band;
+    if (current == null) return;
+    await ref.read(sharedPreferencesProvider).setString(_key, current.name);
+    state = null;
+  }
+}
+
+final bandChangeProvider = NotifierProvider<BandChangeController, BandChange?>(BandChangeController.new);
