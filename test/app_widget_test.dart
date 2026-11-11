@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pulso/app/app.dart';
 import 'package:pulso/app/providers.dart';
+import 'package:pulso/features/reservoir/data/territory_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> pumpApp(WidgetTester tester, Map<String, Object> prefs) async {
@@ -12,6 +15,15 @@ Future<void> pumpApp(WidgetTester tester, Map<String, Object> prefs) async {
     ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(instance),
+        // I/O real (rootBundle lendo do disco) não completa no relógio simulado do teste:
+        // injeta o pacote embutido lido de forma síncrona.
+        territoryRepositoryProvider.overrideWithValue(
+          TerritoryRepository(
+            prefs: instance,
+            remoteUrl: '',
+            loadAsset: (_) => Future.value(File('assets/data/pulso_data.json').readAsStringSync()),
+          ),
+        ),
         // Dia seguinte ao último dado do pacote: dados "frescos".
         clockProvider.overrideWithValue(() => DateTime(2026, 11, 10, 9)),
       ],
