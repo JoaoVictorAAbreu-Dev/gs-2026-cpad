@@ -144,9 +144,14 @@ class _ReservoirCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            // Wrap: com fonte grande a etiqueta desce de linha em vez de espremer o título.
+            Wrap(
+              spacing: PulsoSpacing.sm,
+              runSpacing: PulsoSpacing.xs,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.spaceBetween,
               children: [
-                Expanded(child: Text('Cantareira · volume útil', style: text.titleMedium)),
+                Text('Cantareira · volume útil', style: text.titleMedium),
                 DataSourceTag(real: snapshot.origin == DataOrigin.real),
               ],
             ),

@@ -29,16 +29,25 @@ class SettingsScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(PulsoSpacing.screen),
         children: [
           header('Tema'),
-          SegmentedButton<PulsoThemeMode>(
-            segments: const [
-              ButtonSegment(value: PulsoThemeMode.system, label: Text('Sistema')),
-              ButtonSegment(value: PulsoThemeMode.light, label: Text('Claro')),
-              ButtonSegment(value: PulsoThemeMode.dark, label: Text('Escuro')),
-              ButtonSegment(value: PulsoThemeMode.highContrast, label: Text('Contraste')),
+          // Chips em Wrap: com texto grande os rótulos descem de linha em vez de quebrar palavras.
+          Wrap(
+            spacing: PulsoSpacing.sm,
+            runSpacing: PulsoSpacing.sm,
+            children: [
+              for (final (mode, label, icon) in const [
+                (PulsoThemeMode.system, 'Sistema', Icons.brightness_auto_outlined),
+                (PulsoThemeMode.light, 'Claro', Icons.light_mode_outlined),
+                (PulsoThemeMode.dark, 'Escuro', Icons.dark_mode_outlined),
+                (PulsoThemeMode.highContrast, 'Alto contraste', Icons.contrast),
+              ])
+                ChoiceChip(
+                  avatar: Icon(icon, size: 18),
+                  label: Text(label),
+                  selected: s.themeMode == mode,
+                  showCheckmark: false,
+                  onSelected: (_) => ctrl.setTheme(mode),
+                ),
             ],
-            selected: {s.themeMode},
-            showSelectedIcon: false,
-            onSelectionChanged: (v) => ctrl.setTheme(v.first),
           ),
           header('Tamanho do texto'),
           Card(
