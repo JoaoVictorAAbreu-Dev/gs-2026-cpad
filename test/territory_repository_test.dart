@@ -23,7 +23,7 @@ void main() {
     expect(result.freshness, Freshness.bundled);
     expect(result.remoteError, isNotNull);
     expect(result.data.reservoir.series, isNotEmpty);
-    expect(result.data.reservoir.origin, DataOrigin.synthetic);
+    expect(result.data.reservoir.origin, DataOrigin.real);
     expect(result.data.regions, hasLength(14));
   });
 
