@@ -95,6 +95,17 @@ class _Content extends ConsumerWidget {
         else
           AlertCard(alert: alerts.first),
         const SizedBox(height: PulsoSpacing.md),
+        FilledButton.icon(
+          onPressed: () => context.pushNamed(Routes.newReport),
+          icon: const Icon(Icons.add_comment_outlined),
+          label: const Text('Registrar ocorrência'),
+        ),
+        const SizedBox(height: PulsoSpacing.sm),
+        OutlinedButton(
+          onPressed: () => context.pushNamed(Routes.myReports),
+          child: const Text('Meus registros'),
+        ),
+        const SizedBox(height: PulsoSpacing.md),
         const HumanDecisionBanner(),
         const SizedBox(height: PulsoSpacing.xl),
       ],
