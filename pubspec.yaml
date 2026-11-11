@@ -21,6 +21,9 @@ dependencies:
   shared_preferences: ^2.3.3
   # Formatação pt_BR (vírgula decimal, datas). `any` evita conflito com o pin de flutter_localizations.
   intl: any
+  flutter_local_notifications: ^23.0.1
+  flutter_map: ^8.3.2
+  latlong2: ^0.10.1
 
 dev_dependencies:
   flutter_test:
