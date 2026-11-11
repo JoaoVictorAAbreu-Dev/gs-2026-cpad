@@ -52,7 +52,7 @@ abstract final class PulsoThemes {
     required Color cardColor,
     double borderWidth = 1,
   }) {
-    final base = ThemeData(useMaterial3: true, colorScheme: scheme);
+    final base = ThemeData(useMaterial3: true, colorScheme: scheme, fontFamily: 'Inter');
     // Escala tipográfica do Figma (Inter). Sem alturas fixas: suporta fonte até 200%.
     final text = base.textTheme.copyWith(
       displaySmall: const TextStyle(fontSize: 36, fontWeight: FontWeight.w700, height: 1.1),
