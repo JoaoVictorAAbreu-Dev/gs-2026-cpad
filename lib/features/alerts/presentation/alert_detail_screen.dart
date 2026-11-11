@@ -68,7 +68,11 @@ class _Body extends ConsumerWidget {
           children: [
             Expanded(
               child: _Panel(
-                color: c.dangerContainer,
+                color: switch (alert.severity) {
+                  Severity.high => c.dangerContainer,
+                  Severity.moderate => c.warningContainer,
+                  Severity.low => c.successContainer,
+                },
                 title: 'RISCO',
                 badge: SeverityBadge(severity: alert.severity),
                 body: switch (alert.severity) {
