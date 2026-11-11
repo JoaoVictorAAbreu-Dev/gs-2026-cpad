@@ -3,6 +3,11 @@ import '../../reservoir/domain/reservoir_models.dart';
 import 'alert.dart';
 import 'confidence.dart';
 
+/// Registros por semana a partir dos quais uma região tem risco alto / moderado.
+/// Usado pelo motor e pelo mapa, para que os dois sempre concordem.
+const kRegionHighFrom = 8;
+const kRegionModerateFrom = 4;
+
 /// Limiares configuráveis pelo gestor (tela Configurações › Limiares).
 class AlertThresholds {
   const AlertThresholds({
@@ -176,7 +181,7 @@ class AlertEngine {
       regionId: a.regionId,
       title: 'Mais registros de falta de água em ${a.regionName}',
       summary: '${a.lastWeek} registros nos últimos 7 dias, contra ${a.previousWeek} na semana anterior.',
-      severity: Severity.moderate,
+      severity: a.lastWeek >= kRegionHighFrom ? Severity.high : Severity.moderate,
       // Poucos registros = evidência fraca.
       confidence: a.lastWeek >= 3 * t.surgeMinCount ? ConfidenceLevel.medium : ConfidenceLevel.low,
       horizon: AlertHorizon.monitor,
@@ -190,7 +195,8 @@ class AlertEngine {
         'Registros dependem de quem tem acesso ao app: regiões com menos acesso aparecem menos.',
         'Uma pessoa pode registrar o mesmo problema mais de uma vez.',
       ],
-      ruleDescription: 'Alerta quando há pelo menos ${t.surgeMinCount} registros na semana e '
+      ruleDescription: 'Gravidade alta a partir de $kRegionHighFrom registros na semana. '
+          'Alerta quando há pelo menos ${t.surgeMinCount} registros na semana e '
           '${t.surgeRatio.toStringAsFixed(1).replaceAll('.', ',')}× os da semana anterior.',
     );
   }

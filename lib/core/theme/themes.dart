@@ -104,6 +104,9 @@ abstract final class PulsoThemes {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
+        // Mensagens de erro e ajuda nunca cortadas (inclusive com fonte ampliada).
+        errorMaxLines: 3,
+        helperMaxLines: 3,
         fillColor: cardColor,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(PulsoRadius.button)),
         enabledBorder: OutlineInputBorder(

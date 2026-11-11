@@ -157,6 +157,8 @@ void main() {
       );
       expect(alerts, hasLength(1));
       expect(alerts.single.regionId, 'zl2');
+      // 9 registros ≥ 8 → alto, igual ao mapa.
+      expect(alerts.single.severity, Severity.high);
       expect(alerts.single.basedOnRealData, isFalse);
       expect(alerts.single.limitations.first, contains('sintéticos'));
     });
