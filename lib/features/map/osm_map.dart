@@ -55,13 +55,9 @@ class OsmTerritoryMap extends ConsumerWidget {
           height: height,
           child: FlutterMap(
             options: MapOptions(
-              initialCameraFit: CameraFit.coordinates(
-                coordinates: [
-                  for (final r in withCoords) LatLng(r.lat!, r.lon!),
-                  for (final res in cantareiraReservoirs) res.point,
-                ],
-                padding: const EdgeInsets.all(28),
-              ),
+              // Centro entre as represas (norte) e as regiões da RMSP (sul); zoom que mostra os dois.
+              initialCenter: const LatLng(-23.33, -46.52),
+              initialZoom: 8.6,
               minZoom: 7,
               maxZoom: 15,
               backgroundColor: scheme.surfaceContainerHighest,
