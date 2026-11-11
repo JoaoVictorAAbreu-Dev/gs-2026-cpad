@@ -55,19 +55,24 @@ class AlertCard extends StatelessWidget {
                         Text(alert.title, style: text.titleMedium),
                         const SizedBox(height: PulsoSpacing.sm),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.schedule, size: 16, color: c.muted),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                window,
-                                style: text.bodyMedium?.copyWith(color: c.muted),
-                              ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2),
+                              child: Icon(Icons.schedule, size: 16, color: c.muted),
                             ),
+                            const SizedBox(width: 4),
+                            Expanded(child: Text(window, style: text.bodyMedium?.copyWith(color: c.muted))),
+                          ],
+                        ),
+                        const SizedBox(height: PulsoSpacing.sm),
+                        Row(
+                          children: [
                             if (!alert.reliable)
                               Text('INFORMATIVO', style: text.labelSmall?.copyWith(color: c.warning))
                             else
                               DataSourceTag(real: alert.basedOnRealData),
+                            const Spacer(),
                             const Icon(Icons.chevron_right),
                           ],
                         ),
