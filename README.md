@@ -18,10 +18,10 @@ Global Solution 2026.2 · Cross-Platform Application Development · FIAP — *Te
 
 ## 👥 Integrantes
 
-| Nome | RM | GitHub |
-|---|---|---|
-| **João Victor Alves de Abreu** | 564946 | [@JoaoVictorAAbreu-Dev](https://github.com/JoaoVictorAAbreu-Dev) |
-| **Rodrigo Kenshin Viana Matayoshi** | 564026 | — |
+| Nome | RM |
+|---|---|
+| **João Victor Alves de Abreu** | 564946 |
+| **Rodrigo Kenshin Viana Matayoshi** | 564026 |
 
 ## 📑 Sumário
 
