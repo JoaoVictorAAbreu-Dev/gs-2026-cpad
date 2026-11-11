@@ -77,7 +77,7 @@ class ConfidencePill extends StatelessWidget {
                 color: i < bars ? scheme.primary : scheme.outlineVariant,
               ),
             const SizedBox(width: 6),
-            Text(level.label, style: Theme.of(context).textTheme.labelLarge),
+            Flexible(child: Text(level.label, style: Theme.of(context).textTheme.labelLarge)),
           ],
         ),
       ),
