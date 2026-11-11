@@ -126,7 +126,7 @@ class AlertEngine {
       basedOnRealData: r.origin == DataOrigin.real,
       evidence: [
         Evidence(label: 'Último dado', value: _pct(r.latest.volumePercent), date: r.latest.date),
-        Evidence(label: 'Previsão (${f.method})', value: _pct(f.value), date: f.date),
+        Evidence(label: 'Previsão · ${f.method}', value: _pct(f.value), date: f.date),
         Evidence(label: 'Faixa de erro típico', value: '${_pct(f.lower)} a ${_pct(f.upper)}'),
         Evidence(label: 'Chance estimada de ficar abaixo de ${_pct(floor, 0)}', value: '${(p * 100).round()}%'),
         if (rain7 != null) Evidence(label: 'Chuva nos últimos 7 dias', value: '${rain7.round()} mm'),
