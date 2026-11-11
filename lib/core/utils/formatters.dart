@@ -11,11 +11,11 @@ abstract final class Fmt {
   }
 
   static String date(DateTime d) =>
-      '${_2(d.day)}/${_2(d.month)}/${d.year}';
+      '${_two(d.day)}/${_two(d.month)}/${d.year}';
 
-  static String dayMonth(DateTime d) => '${_2(d.day)}/${_2(d.month)}';
+  static String dayMonth(DateTime d) => '${_two(d.day)}/${_two(d.month)}';
 
-  static String time(DateTime d) => '${_2(d.hour)}:${_2(d.minute)}';
+  static String time(DateTime d) => '${_two(d.hour)}:${_two(d.minute)}';
 
   /// Texto para leitor de tela: "20,2 por cento".
   static String spokenPercent(double v) => '${number(v)} por cento';
@@ -30,5 +30,5 @@ abstract final class Fmt {
 
   static String shortMonth(DateTime d) => _months[d.month - 1].substring(0, 3);
 
-  static String _2(int v) => v.toString().padLeft(2, '0');
+  static String _two(int v) => v.toString().padLeft(2, '0');
 }
