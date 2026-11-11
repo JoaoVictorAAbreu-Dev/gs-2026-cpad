@@ -84,8 +84,8 @@ class OsmTerritoryMap extends ConsumerWidget {
                   for (final r in withCoords)
                     Marker(
                       point: LatLng(r.lat!, r.lon!),
-                      width: 46,
-                      height: 46,
+                      width: 40,
+                      height: 40,
                       child: _RegionPin(region: r, severity: severityOf(r), onTap: () => onTap(r), colors: c),
                     ),
                 ],

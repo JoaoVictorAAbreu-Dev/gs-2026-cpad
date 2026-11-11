@@ -87,18 +87,24 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 ],
               ),
               const SizedBox(height: PulsoSpacing.md),
-              Semantics(
-                label: 'Forma de visualização',
-                child: SegmentedButton<MapView>(
-                  segments: const [
-                    ButtonSegment(value: MapView.osm, icon: Icon(Icons.map_outlined), label: Text('Mapa')),
-                    ButtonSegment(value: MapView.cartogram, icon: Icon(Icons.hexagon_outlined), label: Text('Cartograma')),
-                    ButtonSegment(value: MapView.list, icon: Icon(Icons.list), label: Text('Lista')),
-                  ],
-                  selected: {_view},
-                  showSelectedIcon: false,
-                  onSelectionChanged: (v) => setState(() => _view = v.first),
-                ),
+              // Chips em Wrap: rótulos inteiros mesmo com fonte grande.
+              Wrap(
+                spacing: PulsoSpacing.sm,
+                runSpacing: PulsoSpacing.sm,
+                children: [
+                  for (final (view, label, icon) in const [
+                    (MapView.osm, 'Mapa', Icons.map_outlined),
+                    (MapView.cartogram, 'Cartograma', Icons.hexagon_outlined),
+                    (MapView.list, 'Lista', Icons.list),
+                  ])
+                    ChoiceChip(
+                      avatar: Icon(icon, size: 18),
+                      label: Text(label),
+                      selected: _view == view,
+                      showCheckmark: false,
+                      onSelected: (_) => setState(() => _view = view),
+                    ),
+                ],
               ),
               const SizedBox(height: PulsoSpacing.md),
               switch (_view) {

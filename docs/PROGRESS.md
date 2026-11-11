@@ -7,9 +7,11 @@
   aviso de mudança de faixa, fonte Inter embutida, testes de layout em 360 px / 200% / alto contraste,
   prints no README e roteiro do vídeo. `flutter analyze` sem avisos; 63 testes passando.
 
+- 11/11/2026: notificação do sistema na mudança de faixa (flutter_local_notifications) e mapa OpenStreetMap
+  (flutter_map) com represas e regiões; 68 testes passando.
+
 ## Pendente (depende do aluno)
 
 - Gravar o vídeo (roteiro em `docs/VIDEO.md`) e colocar o link no README.
 - Tornar o repositório público antes de enviar o `.txt` (19/11/2026, 23h55).
 - Opcional: APK em Releases e verificação em emulador Android (exige Android SDK, ~7 GB).
-- Notificação push na mudança de faixa ficou como aviso dentro do app (sem plugin nativo).
