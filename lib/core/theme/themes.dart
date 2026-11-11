@@ -63,7 +63,7 @@ abstract final class PulsoThemes {
       bodyMedium: const TextStyle(fontSize: 14, height: 1.35),
       labelLarge: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, height: 1.35),
       labelSmall: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, height: 1.3, letterSpacing: 0.4),
-    ).apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
+    ).apply(fontFamily: 'Inter', bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
 
     final cardShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(PulsoRadius.card),
