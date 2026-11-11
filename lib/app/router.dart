@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../features/alerts/presentation/alert_detail_screen.dart';
 import '../features/alerts/presentation/alerts_screen.dart';
 import '../features/home/home_screen.dart';
+import '../features/indicators/indicator_detail_screen.dart';
 import '../features/indicators/indicators_screen.dart';
 import '../features/map/map_screen.dart';
 import '../features/onboarding/consent_screen.dart';
@@ -20,6 +21,7 @@ import 'shell.dart';
 abstract final class Routes {
   static const home = 'home';
   static const indicators = 'indicators';
+  static const indicatorDetail = 'indicatorDetail';
   static const map = 'map';
   static const alerts = 'alerts';
   static const alertDetail = 'alertDetail';
@@ -58,7 +60,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(routes: [
             GoRoute(path: '/', name: Routes.home, builder: (context, state) => const HomeScreen()),
           ]),
-          StatefulShellBranch(initialLocation: '/indicadores/recursos', routes: [
+          StatefulShellBranch(initialLocation: '/indicadores/agua', routes: [
             GoRoute(
               path: '/indicadores/:aba',
               name: Routes.indicators,
@@ -76,6 +78,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
       // Telas empilhadas fora do shell (sem barra inferior).
+      GoRoute(
+        path: '/indicador/:indicador',
+        name: Routes.indicatorDetail,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => IndicatorDetailScreen(slug: state.pathParameters['indicador']!),
+      ),
       GoRoute(
         path: '/alertas/:id',
         name: Routes.alertDetail,

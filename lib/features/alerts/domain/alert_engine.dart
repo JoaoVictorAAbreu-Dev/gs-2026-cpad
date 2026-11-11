@@ -85,7 +85,7 @@ class AlertEngine {
     final alerts = <Alert?>[
       _forecastBelowFloor(reservoir, thresholds),
       _continuousDecline(reservoir, thresholds),
-      for (final r in regions) _occurrenceSurge(r, thresholds),
+      for (final r in regions) _occurrenceSurge(r, thresholds, now),
     ].whereType<Alert>().map((a) => a.regionId == null ? _applyStaleness(a, ageDays) : a).toList();
 
     alerts.sort((a, b) {
@@ -122,6 +122,7 @@ class AlertEngine {
       probability: p,
       horizon: AlertHorizon.shortTerm,
       validUntil: f.date,
+      window: AlertWindow(from: r.latest.date, to: f.date, kind: WindowKind.forecast),
       basedOnRealData: r.origin == DataOrigin.real,
       evidence: [
         Evidence(label: 'Último dado', value: _pct(r.latest.volumePercent), date: r.latest.date),
@@ -155,6 +156,11 @@ class AlertEngine {
       severity: Severity.moderate,
       confidence: ConfidenceLevel.high,
       horizon: AlertHorizon.monitor,
+      window: AlertWindow(
+        from: r.latest.date.subtract(Duration(days: 30 * (months + 1))),
+        to: r.latest.date,
+        kind: WindowKind.observed,
+      ),
       basedOnRealData: r.origin == DataOrigin.real,
       evidence: [
         Evidence(label: 'Meses seguidos de queda', value: '$months'),
@@ -171,7 +177,7 @@ class AlertEngine {
   }
 
   // ── Regra 3: alta de ocorrências por região ─────────────────────────────────
-  Alert? _occurrenceSurge(RegionActivity a, AlertThresholds t) {
+  Alert? _occurrenceSurge(RegionActivity a, AlertThresholds t, DateTime now) {
     if (a.lastWeek < t.surgeMinCount) return null;
     final ratio = a.previousWeek == 0 ? double.infinity : a.lastWeek / a.previousWeek;
     if (ratio < t.surgeRatio) return null;
@@ -185,6 +191,11 @@ class AlertEngine {
       // Poucos registros = evidência fraca.
       confidence: a.lastWeek >= 3 * t.surgeMinCount ? ConfidenceLevel.medium : ConfidenceLevel.low,
       horizon: AlertHorizon.monitor,
+      window: AlertWindow(
+        from: DateTime(now.year, now.month, now.day).subtract(const Duration(days: 7)),
+        to: DateTime(now.year, now.month, now.day),
+        kind: WindowKind.observed,
+      ),
       basedOnRealData: !a.synthetic,
       evidence: [
         Evidence(label: 'Últimos 7 dias', value: '${a.lastWeek}'),
@@ -225,6 +236,7 @@ class AlertEngine {
       validUntil: a.validUntil,
       regionId: a.regionId,
       reliable: !unreliable,
+      window: a.window,
     );
   }
 }

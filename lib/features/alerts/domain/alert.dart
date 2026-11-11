@@ -20,6 +20,36 @@ class Evidence {
   final DateTime? date;
 }
 
+/// Período a que o alerta se refere: o que já foi observado ou o que está sendo previsto.
+enum WindowKind { observed, forecast }
+
+class AlertWindow {
+  const AlertWindow({required this.from, required this.to, required this.kind});
+  final DateTime from;
+  final DateTime to;
+  final WindowKind kind;
+
+  int get days => to.difference(from).inDays;
+}
+
+/// Indicadores que podem originar alertas (rota de detalhe do indicador).
+enum IndicatorId {
+  volume('volume', 'Volume útil do Sistema Cantareira'),
+  rain('chuva', 'Chuva na bacia'),
+  reports('registros', 'Registros de falta de água');
+
+  const IndicatorId(this.slug, this.label);
+  final String slug;
+  final String label;
+
+  static IndicatorId? fromSlug(String? slug) {
+    for (final i in values) {
+      if (i.slug == slug) return i;
+    }
+    return null;
+  }
+}
+
 class Alert {
   const Alert({
     required this.id,
@@ -37,6 +67,7 @@ class Alert {
     this.validUntil,
     this.regionId,
     this.reliable = true,
+    this.window,
   });
 
   final String id;
@@ -60,4 +91,13 @@ class Alert {
 
   /// `false` quando os dados estão velhos demais: o alerta vira apenas informativo.
   final bool reliable;
+
+  /// Janela temporal da evidência (observada) ou da previsão.
+  final AlertWindow? window;
+
+  /// Indicador que originou o alerta.
+  IndicatorId get indicator => switch (ruleId) {
+        'occurrence_surge' => IndicatorId.reports,
+        _ => IndicatorId.volume,
+      };
 }

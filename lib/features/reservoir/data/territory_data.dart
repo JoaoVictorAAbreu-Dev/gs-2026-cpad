@@ -15,7 +15,8 @@ class Region {
     required this.synthetic,
     this.lat,
     this.lon,
-  });
+    List<int>? weekly,
+  }) : weekly = weekly ?? const [];
 
   /// Ponto central aproximado da região (para o mapa base). `null` em pacotes antigos.
   final double? lat;
@@ -28,6 +29,12 @@ class Region {
   final int row;
   final int lastWeek;
   final int previousWeek;
+
+  /// Registros por semana, da mais antiga à mais recente (termina em [previousWeek], [lastWeek]).
+  /// Pacotes antigos sem o campo usam só as duas últimas semanas.
+  final List<int> weekly;
+
+  List<int> get weeklyHistory => weekly.length >= 2 ? weekly : [previousWeek, lastWeek];
 
   /// População em dezenas de milhares (para normalizar registros por 10 mil habitantes).
   final double population10k;
@@ -56,6 +63,7 @@ class Region {
         synthetic: (j['origin'] as String?) != 'real',
         lat: (j['lat'] as num?)?.toDouble(),
         lon: (j['lon'] as num?)?.toDouble(),
+        weekly: [for (final v in (j['weekly'] as List<dynamic>? ?? const [])) (v as num).toInt()],
       );
 }
 

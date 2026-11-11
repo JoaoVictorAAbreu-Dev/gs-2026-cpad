@@ -207,6 +207,11 @@ class _ReservoirCard extends ConsumerWidget {
               style: text.bodyMedium?.copyWith(color: c.muted),
             ),
             const SizedBox(height: PulsoSpacing.xs),
+            FilledButton.tonalIcon(
+              onPressed: () => context.pushNamed(Routes.indicatorDetail, pathParameters: {'indicador': 'volume'}),
+              icon: const Icon(Icons.show_chart, size: 18),
+              label: const Text('Ver detalhe do indicador'),
+            ),
             TextButton.icon(
               onPressed: () => _copySummary(context, snapshot),
               icon: const Icon(Icons.copy_rounded, size: 18),
