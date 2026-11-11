@@ -7,6 +7,7 @@ import '../../app/router.dart';
 import '../../core/theme/pulso_colors.dart';
 import '../../core/theme/tokens.dart';
 import '../../core/utils/formatters.dart';
+import 'pulso_logo.dart';
 
 /// Cabeçalho das abas: território + data do último dado + acesso a Configurações.
 class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
@@ -23,16 +24,7 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
       titleSpacing: PulsoSpacing.screen,
       title: Row(
         children: [
-          Container(
-            width: 30,
-            height: 30,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(9),
-            ),
-            child: Text('P', style: text.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimary)),
-          ),
+          const PulsoMark(size: 30),
           const SizedBox(width: PulsoSpacing.md12),
           Expanded(
             child: Column(
