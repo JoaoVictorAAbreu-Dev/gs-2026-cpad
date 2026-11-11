@@ -232,7 +232,10 @@ class _ChartPainter extends CustomPainter {
         Rect.fromLTRB(plot.left, yOf(top), plot.right, yOf(bottom)),
         Paint()..color = c.withValues(alpha: 0.55),
       );
-      _text(canvas, band.label, Offset(plot.left + 4, yOf(top) + 2), colors.muted);
+      // Só rotula a faixa se houver altura para o texto (evita colidir com o eixo X).
+      if (yOf(bottom) - yOf(top) >= 18) {
+        _text(canvas, band.label, Offset(plot.left + 4, yOf(top) + 2), colors.muted);
+      }
       if (band.lower.isFinite && band.lower > minY && band.lower < maxY) {
         canvas.drawLine(
           Offset(plot.left, yOf(band.lower)),
