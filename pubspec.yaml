@@ -45,3 +45,5 @@ flutter:
           weight: 600
         - asset: assets/fonts/inter/Inter-Bold.otf
           weight: 700
+        - asset: assets/fonts/inter/Inter-ExtraBold.otf
+          weight: 800

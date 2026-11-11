@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/pulso_colors.dart';
 import '../../core/theme/tokens.dart';
+import '../../shared/widgets/pulso_logo.dart';
 import '../settings/settings_controller.dart';
 
 /// Consentimento explícito antes de qualquer uso. Lista o que é guardado e o que não é pedido.
@@ -47,6 +48,8 @@ class _ConsentScreenState extends ConsumerState<ConsentScreen> {
             child: ListView(
               padding: const EdgeInsets.all(PulsoSpacing.lg),
               children: [
+                const Align(alignment: Alignment.centerLeft, child: PulsoLogo(markSize: 36)),
+                const SizedBox(height: PulsoSpacing.lg),
                 Semantics(header: true, child: Text('Seus dados, suas regras', style: text.headlineMedium)),
                 const SizedBox(height: PulsoSpacing.md),
                 Text(
