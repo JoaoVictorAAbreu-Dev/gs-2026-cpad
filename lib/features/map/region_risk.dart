@@ -1,11 +1,12 @@
 import '../alerts/domain/alert.dart';
+import '../alerts/domain/alert_engine.dart';
 import '../reservoir/data/territory_data.dart';
 
 /// Risco de abastecimento por região a partir dos registros (dados sintéticos).
 /// Regra simples e declarada na tela: ≥ 8 registros/semana = alto; ≥ 4 = moderado.
 abstract final class RegionRisk {
-  static const highFrom = 8;
-  static const moderateFrom = 4;
+  static const highFrom = kRegionHighFrom;
+  static const moderateFrom = kRegionModerateFrom;
 
   static Severity fromCount(int count) {
     if (count >= highFrom) return Severity.high;

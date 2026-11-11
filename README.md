@@ -36,8 +36,9 @@ _Prints pendentes — serão salvos em `assets/screenshots/`._
 - [x] Temas claro, escuro e alto contraste; texto até 200%; reduzir animações; leitura simples
 - [x] "Ver como tabela" nos gráficos para leitores de tela
 - [x] Detector de dados pessoais (CPF, telefone, e-mail, CEP, endereço) para os registros
-- [ ] Registro de ocorrência (4 etapas) e "Meus registros" com fila offline
-- [ ] Cartograma hexagonal com previsão +7 dias
+- [x] Registro de ocorrência em 4 etapas, com dados pessoais removidos antes de salvar
+- [x] "Meus registros" com status real e fila offline (API simulada)
+- [x] Cartograma hexagonal com alternância Hoje / +7 dias e painel da região
 - [ ] Previsão do tempo (Open-Meteo)
 - [ ] Notificação local na mudança de faixa
 
@@ -76,12 +77,13 @@ Estrutura: `lib/core` (tema, utilitários, resultado de dados), `lib/shared/widg
 
 ## Como executar
 
+Requer Flutter 3.35+ (testado em 3.47.9).
+
 ```bash
-git clone <repo> && cd pulso
-flutter create . --project-name pulso --platforms=android,ios   # gera as pastas de plataforma, mantém lib/
+git clone https://github.com/JoaoVictorAAbreu-Dev/gs-2026-cpad && cd gs-2026-cpad
 flutter pub get
 flutter test
-flutter run                                                      # usa o pacote embutido
+flutter run                 # usa o pacote embutido (Android, iOS, web ou Linux)
 flutter run --dart-define=PULSO_DATA_URL=https://<usuario>.github.io/pulso-data/pulso_data.json
 ```
 
