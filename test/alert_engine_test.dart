@@ -126,6 +126,22 @@ void main() {
       expect(old.reliable, isFalse);
       expect(old.confidence, ConfidenceLevel.low);
     });
+
+    test('previsão cuja data já passou vira informativa', () {
+      final expired = engine
+          .evaluate(reservoir: snapshot(series, forecast: f), now: end.add(const Duration(days: 8)))
+          .first;
+      expect(expired.reliable, isFalse);
+      expect(expired.confidence, ConfidenceLevel.low);
+      expect(expired.limitations.first, contains('já passou'));
+    });
+
+    test('no próprio dia da previsão ela ainda vale', () {
+      final sameDay = engine
+          .evaluate(reservoir: snapshot(series, forecast: f), now: end.add(const Duration(days: 7, hours: 20)))
+          .first;
+      expect(sameDay.reliable, isTrue);
+    });
   });
 
   group('regra: queda contínua', () {

@@ -53,7 +53,7 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
 
   String? _validateCurrent() => switch (_step) {
         0 => ReportValidator.type(_type),
-        1 => ReportValidator.region(_regionId),
+        1 => ReportValidator.region(_knownRegionId(_regionId)),
         2 => ReportValidator.description(_description.text),
         _ => null,
       };
@@ -86,16 +86,38 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
   }
 
   Future<void> _submit(List<Region> regions) async {
+    final region = regions.where((r) => r.id == _regionId).firstOrNull;
+    if (_type == null || region == null) {
+      // Dados da região ainda não carregaram ou a região deixou de existir: volta para a etapa.
+      setState(() {
+        _step = _type == null ? 0 : 1;
+        _stepError = _type == null ? ReportValidator.type(null) : ReportValidator.region(null);
+      });
+      return;
+    }
     setState(() => _submitting = true);
-    final region = regions.firstWhere((r) => r.id == _regionId);
-    final report = await ref.read(reportsProvider.notifier).create(
-          type: _type!,
-          regionId: region.id,
-          regionName: region.name,
-          description: _description.text,
-        );
-    if (!mounted) return;
-    context.goNamed(Routes.reportSuccess, pathParameters: {'protocol': report.protocol});
+    try {
+      final report = await ref.read(reportsProvider.notifier).create(
+            type: _type!,
+            regionId: region.id,
+            regionName: region.name,
+            description: _description.text,
+          );
+      if (!mounted) return;
+      context.goNamed(Routes.reportSuccess, pathParameters: {'protocol': report.protocol});
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _submitting = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Não foi possível salvar o registro. Tente de novo.')),
+      );
+    }
+  }
+
+  /// `null` quando o id não corresponde a nenhuma região carregada.
+  String? _knownRegionId(String? id) {
+    final regions = ref.read(territoryProvider).valueOrNull?.data.regions ?? const <Region>[];
+    return regions.any((r) => r.id == id) ? id : null;
   }
 
   @override
@@ -192,7 +214,8 @@ class _ReportFormScreenState extends ConsumerState<ReportFormScreen> {
         ),
         const SizedBox(height: PulsoSpacing.md),
         DropdownButtonFormField<String>(
-          initialValue: _regionId,
+          // Região vinda do mapa (?regiao=) só é pré-selecionada se existir na lista.
+          initialValue: regions.any((r) => r.id == _regionId) ? _regionId : null,
           isExpanded: true,
           decoration: const InputDecoration(labelText: 'Região *'),
           items: [for (final r in regions) DropdownMenuItem(value: r.id, child: Text(r.name))],

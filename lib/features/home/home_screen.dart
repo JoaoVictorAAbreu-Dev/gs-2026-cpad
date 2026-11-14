@@ -194,7 +194,10 @@ class _ReservoirCard extends ConsumerWidget {
             if (f != null) ...[
               const SizedBox(height: PulsoSpacing.sm),
               Text(
-                simple
+                _forecastExpired(f, ref.watch(clockProvider)())
+                    ? 'A previsão era para ${Fmt.dayMonth(f.date)}: ${Fmt.percent(f.value)}. Essa data já passou; '
+                        'atualize os dados para uma previsão nova.'
+                    : simple
                     ? 'Em ${Fmt.dayMonth(f.date)}, o nível deve ficar perto de ${Fmt.percent(f.value)}.'
                     : 'Previsão para ${Fmt.dayMonth(f.date)}: ${Fmt.percent(f.value)} '
                         '(${Fmt.percent(f.lower)} a ${Fmt.percent(f.upper)}). Método: ${f.method}.',
@@ -223,6 +226,10 @@ class _ReservoirCard extends ConsumerWidget {
     );
   }
 }
+
+/// A data-alvo da previsão já ficou para trás (pacote de dados antigo).
+bool _forecastExpired(Forecast f, DateTime now) =>
+    DateTime(f.date.year, f.date.month, f.date.day).isBefore(DateTime(now.year, now.month, now.day));
 
 /// Texto curto para mandar no WhatsApp/e-mail — sempre com fonte e o aviso de sinal exploratório.
 Future<void> _copySummary(BuildContext context, ReservoirSnapshot s) async {

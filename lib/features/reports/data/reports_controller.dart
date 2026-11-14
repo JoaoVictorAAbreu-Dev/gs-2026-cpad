@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,13 +21,21 @@ final reportApiProvider = Provider<ReportApi>(
 class ReportsController extends Notifier<List<Report>> {
   static const _key = 'reports.v1';
 
+  bool _flushing = false;
+
   @override
   List<Report> build() {
+    // Ao voltar a conexão, envia o que ficou na fila.
+    ref.listen<bool>(simulatedOnlineProvider, (previous, online) {
+      if (online && previous == false) unawaited(flushQueue());
+    });
     final raw = ref.watch(sharedPreferencesProvider).getStringList(_key) ?? const [];
     final out = <Report>[];
     for (final item in raw) {
       try {
-        out.add(Report.fromJson(jsonDecode(item) as Map<String, dynamic>));
+        final r = Report.fromJson(jsonDecode(item) as Map<String, dynamic>);
+        // "Salvo no aparelho" é transitório; se o app fechou antes do envio, volta para a fila.
+        out.add(r.status == ReportStatus.savedLocally ? r.copyWith(status: ReportStatus.queued) : r);
       } catch (_) {
         // Entrada corrompida não derruba a lista.
       }
@@ -58,11 +67,18 @@ class ReportsController extends Notifier<List<Report>> {
   }
 
   /// Reenvia tudo que ficou na fila (botão "Enviar agora" e ao voltar a conexão).
+  /// Ignora chamadas enquanto um envio da fila já está em andamento (evita envio duplicado).
   Future<int> flushQueue() async {
+    if (_flushing) return 0;
+    _flushing = true;
     var sent = 0;
-    for (final r in state.where((r) => r.status == ReportStatus.queued || r.status == ReportStatus.savedLocally).toList()) {
-      final result = await _trySend(r);
-      if (result.status == ReportStatus.sent) sent++;
+    try {
+      for (final r in state.where((r) => r.status == ReportStatus.queued).toList()) {
+        final result = await _trySend(r);
+        if (result.status == ReportStatus.sent) sent++;
+      }
+    } finally {
+      _flushing = false;
     }
     return sent;
   }

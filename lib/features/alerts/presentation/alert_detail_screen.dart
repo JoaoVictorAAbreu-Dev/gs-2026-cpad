@@ -28,6 +28,14 @@ class AlertDetailScreen extends ConsumerWidget {
       appBar: AppBar(title: const Text('Como chegamos a este alerta?')),
       body: alerts.isLoading
           ? const Padding(padding: EdgeInsets.all(PulsoSpacing.screen), child: LoadingSkeleton())
+          : alerts.hasError && alert == null
+              ? Padding(
+                  padding: const EdgeInsets.all(PulsoSpacing.screen),
+                  child: ErrorState(
+                    message: 'Não foi possível carregar os dados deste alerta.',
+                    onRetry: () => ref.read(territoryProvider.notifier).refresh(),
+                  ),
+                )
           : alert == null
               ? const Padding(
                   padding: EdgeInsets.all(PulsoSpacing.screen),

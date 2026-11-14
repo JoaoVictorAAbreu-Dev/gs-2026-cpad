@@ -86,7 +86,7 @@ class AlertEngine {
       _forecastBelowFloor(reservoir, thresholds),
       _continuousDecline(reservoir, thresholds),
       for (final r in regions) _occurrenceSurge(r, thresholds, now),
-    ].whereType<Alert>().map((a) => a.regionId == null ? _applyStaleness(a, ageDays) : a).toList();
+    ].whereType<Alert>().map((a) => a.regionId == null ? _applyStaleness(a, ageDays, now) : a).toList();
 
     alerts.sort((a, b) {
       final bySeverity = a.severity.index.compareTo(b.severity.index);
@@ -212,9 +212,13 @@ class AlertEngine {
     );
   }
 
-  Alert _applyStaleness(Alert a, int ageDays) {
-    if (ageDays <= staleAfterDays) return a;
-    final unreliable = ageDays > unreliableAfterDays;
+  Alert _applyStaleness(Alert a, int ageDays, DateTime now) {
+    final today = DateTime(now.year, now.month, now.day);
+    final until = a.validUntil;
+    // Previsão cuja data-alvo já passou: não descreve mais o futuro.
+    final expired = until != null && DateTime(until.year, until.month, until.day).isBefore(today);
+    if (ageDays <= staleAfterDays && !expired) return a;
+    final unreliable = expired || ageDays > unreliableAfterDays;
     return Alert(
       id: a.id,
       ruleId: a.ruleId,
@@ -225,9 +229,13 @@ class AlertEngine {
       horizon: a.horizon,
       evidence: a.evidence,
       limitations: [
-        unreliable
-            ? 'Dados com $ageDays dias: alerta apenas informativo, não confiável para decisão.'
-            : 'Dados com $ageDays dias: a confiança foi reduzida em um nível.',
+        if (expired)
+          'A data prevista (${_dm(until)}) já passou e não há dado mais novo: alerta apenas informativo, '
+              'não confiável para decisão. Atualize os dados.'
+        else if (unreliable)
+          'Dados com $ageDays dias: alerta apenas informativo, não confiável para decisão.'
+        else
+          'Dados com $ageDays dias: a confiança foi reduzida em um nível.',
         ...a.limitations,
       ],
       ruleDescription: a.ruleDescription,
