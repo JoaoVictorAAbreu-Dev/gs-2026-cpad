@@ -105,6 +105,12 @@ Capturas do app compilado para web em 390 × 844, com os dados reais embutidos (
     <td align="center"><img src="assets/screenshots/19-limiares.png" width="190"><br><sub><b>21.</b> Formulário de limiares</sub></td>
     <td align="center"><img src="assets/screenshots/20-alto-contraste-texto-200.png" width="190"><br><sub><b>22.</b> Alto contraste e texto 200 %</sub></td>
     <td align="center"><img src="assets/screenshots/21-tema-escuro.png" width="190"><br><sub><b>23.</b> Tema escuro</sub></td>
+    <td align="center"><img src="assets/screenshots/24-alerta-leitura-simples.png" width="190"><br><sub><b>24.</b> Leitura simples e previsão vencida (v1.0.1)</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/25-registro-protocolo.png" width="190"><br><sub><b>25.</b> Confirmação com "Copiar protocolo" (v1.0.1)</sub></td>
+    <td align="center"><img src="assets/screenshots/26-meus-registros-protocolo.png" width="190"><br><sub><b>26.</b> Meus registros com registro enviado (v1.0.1)</sub></td>
+    <td></td>
     <td></td>
   </tr>
 </table>
