@@ -11,7 +11,9 @@ import '../../../shared/widgets/feedback.dart';
 import '../../reservoir/domain/reservoir_models.dart';
 import '../../../app/router.dart';
 import '../domain/alert.dart';
+import '../../settings/settings_controller.dart';
 import '../domain/confidence.dart';
+import '../domain/plain_language.dart';
 import 'alert_card.dart';
 
 /// "Como chegamos a este alerta?" — evidência, risco × confiança, limites e regra usada.
@@ -67,6 +69,15 @@ class _Body extends ConsumerWidget {
         Text(alert.title, style: text.headlineMedium),
         const SizedBox(height: PulsoSpacing.sm),
         Text(alert.summary, style: text.bodyLarge),
+        if (ref.watch(settingsProvider.select((s) => s.simpleReading))) ...[
+          const SizedBox(height: PulsoSpacing.md),
+          InfoBanner(
+            icon: Icons.chat_bubble_outline,
+            title: 'Em palavras simples',
+            message: PlainLanguage.explain(alert).join(' '),
+            tone: BannerTone.info,
+          ),
+        ],
         if (!alert.reliable) ...[
           const SizedBox(height: PulsoSpacing.md),
           InfoBanner(
