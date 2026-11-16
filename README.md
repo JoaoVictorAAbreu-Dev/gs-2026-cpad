@@ -10,7 +10,7 @@ Global Solution 2026.2 · Cross-Platform Application Development · FIAP · Desa
 
 ![Flutter](https://img.shields.io/badge/Flutter-3.47.9-02569B?logo=flutter&logoColor=white) ![Dart](https://img.shields.io/badge/Dart-3.13-0175C2?logo=dart&logoColor=white) ![Material 3](https://img.shields.io/badge/Material-3-757575?logo=materialdesign&logoColor=white) ![Riverpod](https://img.shields.io/badge/Riverpod-2.6-00B4AB) ![go_router](https://img.shields.io/badge/go__router-14.6-4A90D9) ![flutter_map](https://img.shields.io/badge/flutter__map-8.3-4C9A2A)
 
-![Testes](https://img.shields.io/badge/testes-87%20passando-2EA44F) ![flutter analyze](https://img.shields.io/badge/flutter%20analyze-sem%20avisos-2EA44F) ![Acessibilidade](https://img.shields.io/badge/acessibilidade-texto%20200%25%20%C2%B7%20alto%20contraste-6A1B9A) ![Plataformas](https://img.shields.io/badge/plataformas-Android%20%C2%B7%20iOS%20%C2%B7%20Web%20%C2%B7%20Linux-455A64)
+![Testes](https://img.shields.io/badge/testes-88%20passando-2EA44F) ![flutter analyze](https://img.shields.io/badge/flutter%20analyze-sem%20avisos-2EA44F) ![Acessibilidade](https://img.shields.io/badge/acessibilidade-texto%20200%25%20%C2%B7%20alto%20contraste-6A1B9A) ![Plataformas](https://img.shields.io/badge/plataformas-Android%20%C2%B7%20iOS%20%C2%B7%20Web%20%C2%B7%20Linux-455A64)
 
 ![Dados](https://img.shields.io/badge/volume%20e%20chuva-Sabesp%20(reais)-0B6E5A) ![Clima](https://img.shields.io/badge/clima-Open--Meteo%20(API%20real)-F57C00) ![Mapa](https://img.shields.io/badge/mapa-OpenStreetMap-7EBC6F?logo=openstreetmap&logoColor=white) ![Ocorrências](https://img.shields.io/badge/ocorr%C3%AAncias-sint%C3%A9ticas-8E7CC3) ![Licença](https://img.shields.io/badge/uso-acad%C3%AAmico-lightgrey)
 
@@ -128,6 +128,8 @@ Capturas do app compilado para web em 390 × 844, com os dados reais embutidos (
 - [x] Indicador de benefício social medido por backtest
 - [x] Consentimento explícito e remoção automática de dados pessoais digitados
 - [x] Temas claro, escuro e alto contraste; texto até 200 %; leitores de tela; "ver como tabela"
+- [x] Modo de leitura simples: cada alerta ganha uma explicação "Em palavras simples"
+- [x] Protocolo da ocorrência copiável para a pessoa acompanhar ou repassar
 - [x] Mapa OpenStreetMap, notificação local de mudança de faixa e testes automatizados (diferenciais)
 
 ### 5.2 Telas e rotas
@@ -317,7 +319,7 @@ flutter run -d chrome           # ou no navegador
 
 ```bash
 flutter analyze   # sem avisos
-flutter test      # 87 testes
+flutter test      # 88 testes
 ```
 
 ### 9.4 Configuração opcional
@@ -334,6 +336,22 @@ flutter test      # 87 testes
 ## 10. Vídeo
 
 Link: https://youtu.be/b5pKOyWLkXQ
+
+> **Versão do vídeo.** O vídeo foi gravado numa versão anterior do app. Todas as telas e fluxos mostrados continuam iguais; a v1.0.1 só corrige comportamentos e acrescenta os itens abaixo.
+
+### 10.1 O que mudou na versão atual (v1.0.1, em relação à v1.0.0)
+
+| Mudança | Antes | Agora |
+|---|---|---|
+| Previsões vencidas | Um alerta de previsão cuja data já tinha passado continuava com a confiança original | O alerta vira "apenas informativo, não confiável para decisão" e a visão geral avisa que a data prevista já passou |
+| Alertas com o app aberto por dias | O "agora" usado nos alertas só mudava ao atualizar os dados | Ao voltar para o app, os alertas são reavaliados com a data atual |
+| Modo de leitura simples | O botão em Configurações era salvo, mas nenhuma tela mudava | O detalhe do alerta mostra "Em palavras simples": o que acontece, quão certo é, o que fazer e quem decide |
+| Formulário de ocorrência | Podia falhar se a região escolhida deixasse de existir ou os dados ainda não tivessem carregado | Volta para a etapa certa com a mensagem de erro; envio protegido contra falhas |
+| Fila offline | Ao religar a internet era preciso tocar em "Enviar agora"; dois envios simultâneos podiam duplicar | Envia sozinho quando a conexão volta, sem duplicar; registros "salvos no aparelho" ao fechar o app voltam para a fila |
+| Detalhe do alerta | Erro ao carregar os dados aparecia como "alerta não está mais ativo" | Mostra a mensagem de erro com "Tentar de novo" |
+| Puxar para atualizar | Se a atualização falhasse, os dados da tela eram trocados por uma tela de erro | Os dados que já estavam na tela continuam visíveis |
+| Apagar meus dados locais | A previsão do tempo em memória continuava aparecendo | Também é recarregada do zero |
+| Protocolo | Só podia ser selecionado como texto | Botão "Copiar protocolo" na confirmação e em Meus registros |
 
 ## 11. Licença
 

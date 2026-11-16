@@ -2,7 +2,7 @@
 
 Para apresentar o PULSO ao vivo (ou gravar a tela com a sua voz) com o app aberto na sua frente. Cada bloco diz **o que abrir**, **o que apontar** e **o que falar**. Duração: cerca de 7 minutos em ritmo calmo. O corte de 3 minutos para o vídeo está no fim e usa o mesmo caminho.
 
-Antes de começar: app instalado (APK da release v1.0.0 ou `flutter run`), tema claro, texto em 100 %, "Simular sem internet" desligado, consentimento ainda não aceito.
+Antes de começar: app instalado (APK da release mais recente ou `flutter run`), tema claro, texto em 100 %, "Simular sem internet" desligado, consentimento ainda não aceito.
 
 ---
 
