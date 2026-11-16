@@ -9,6 +9,7 @@ import '../../../core/utils/formatters.dart';
 import '../../../shared/widgets/feedback.dart';
 import '../data/reports_controller.dart';
 import '../domain/report.dart';
+import 'copy_protocol_button.dart';
 
 class MyReportsScreen extends ConsumerWidget {
   const MyReportsScreen({super.key});
@@ -73,7 +74,14 @@ class MyReportsScreen extends ConsumerWidget {
                     const SizedBox(height: PulsoSpacing.sm),
                     Text(r.description, style: text.bodyMedium, maxLines: 3, overflow: TextOverflow.ellipsis),
                     const SizedBox(height: PulsoSpacing.sm),
-                    SelectableText('Protocolo ${r.protocol}', style: text.labelSmall),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: PulsoSpacing.sm,
+                      children: [
+                        SelectableText('Protocolo ${r.protocol}', style: text.labelSmall),
+                        CopyProtocolButton(protocol: r.protocol),
+                      ],
+                    ),
                   ],
                 ),
               ),

@@ -8,6 +8,7 @@ import '../../../core/theme/tokens.dart';
 import '../../../shared/widgets/feedback.dart';
 import '../data/reports_controller.dart';
 import '../domain/report.dart';
+import 'copy_protocol_button.dart';
 import 'report_status_timeline.dart';
 
 class ReportSuccessScreen extends ConsumerWidget {
@@ -58,6 +59,7 @@ class ReportSuccessScreen extends ConsumerWidget {
             textAlign: TextAlign.center,
             style: text.bodyLarge?.copyWith(color: c.muted),
           ),
+          Center(child: CopyProtocolButton(protocol: report.protocol)),
           if (!sent) ...[
             const SizedBox(height: PulsoSpacing.md),
             const InfoBanner(
