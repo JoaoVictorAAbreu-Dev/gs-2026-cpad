@@ -32,9 +32,12 @@ class TerritoryController extends AsyncNotifier<DataResult<TerritoryData>> {
   @override
   Future<DataResult<TerritoryData>> build() => ref.watch(territoryRepositoryProvider).load();
 
-  /// Puxar para atualizar: mantém os dados atuais visíveis enquanto busca.
+  /// Puxar para atualizar: mantém os dados atuais visíveis enquanto busca e,
+  /// se a atualização falhar, continua mostrando os dados que já estavam na tela.
   Future<void> refresh() async {
-    state = await AsyncValue.guard(() => ref.read(territoryRepositoryProvider).load());
+    final next = await AsyncValue.guard(() => ref.read(territoryRepositoryProvider).load());
+    if (next.hasError && state.hasValue) return;
+    state = next;
   }
 }
 

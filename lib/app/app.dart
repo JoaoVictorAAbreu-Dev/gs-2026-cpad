@@ -5,13 +5,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/theme/themes.dart';
 import '../features/notifications/band_notification_effect.dart';
 import '../features/settings/settings_controller.dart';
+import 'providers.dart';
 import 'router.dart';
 
-class PulsoApp extends ConsumerWidget {
+class PulsoApp extends ConsumerStatefulWidget {
   const PulsoApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PulsoApp> createState() => _PulsoAppState();
+}
+
+class _PulsoAppState extends ConsumerState<PulsoApp> {
+  // Ao voltar para o app (ex.: no dia seguinte), relê o relógio: alertas com
+  // data prevista já vencida passam a "apenas informativo" sem precisar atualizar.
+  late final AppLifecycleListener _lifecycle;
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycle = AppLifecycleListener(onResume: () => ref.invalidate(clockProvider));
+  }
+
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
     final settings = ref.watch(settingsProvider);
     // Mantém o efeito de notificação ativo enquanto o app está aberto.
