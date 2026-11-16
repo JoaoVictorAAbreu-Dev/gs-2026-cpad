@@ -1,6 +1,6 @@
 # Narração do vídeo de demonstração
 
-Texto para gravar com a sua voz sobre o vídeo `PULSO-demo.mp4` (2:41, legendado). Cada fala cabe no tempo da cena em ritmo calmo (cerca de 2,3 palavras por segundo; 343 palavras no total).
+Texto para gravar com a sua voz sobre o vídeo `PULSO-demo.mp4` (2:41, legendado). Cada fala cabe no tempo da cena em ritmo calmo (tom de conversa, com uma fala ligada à seguinte; 403 palavras no total).
 
 ## Como gravar
 
@@ -13,19 +13,19 @@ Texto para gravar com a sua voz sobre o vídeo `PULSO-demo.mp4` (2:41, legendado
 
 | # | Tempo | Cena | Fala |
 |---|---|---|---|
-| 1 | 0:00–0:05 | Abertura | PULSO: um radar territorial que antecipa a crise hídrica do Sistema Cantareira. |
-| 2 | 0:05–0:12 | Consentimento | Primeiro, o consentimento: o app mostra o que guarda e nunca pede nome, CPF ou endereço. |
-| 3 | 0:12–0:27 | Visão geral | Na visão geral, dados reais da Sabesp: cinquenta e dois vírgula nove por cento do volume útil, na faixa Atenção, com a previsão de sete dias e a margem de erro. |
-| 4 | 0:27–0:42 | Dashboard Água | No dashboard Água, o volume dos últimos noventa dias sobre as faixas da ANA, a tendência, o mínimo, o máximo e o histórico de cada mês comparado ao ano anterior. |
-| 5 | 0:42–0:53 | Dashboard Clima | Em Clima, a chuva da bacia por semana e por mês, e a previsão do tempo da Open-Meteo, salva para usar sem internet. |
-| 6 | 0:53–1:03 | Dashboard Risco territorial | Em Risco territorial, os registros de falta de água por região, com histórico e tendência. São dados sintéticos, e o app avisa. |
-| 7 | 1:03–1:14 | Detalhe do indicador | O detalhe do indicador explica o que ele mede, a unidade, a fonte e as limitações, e lista os alertas que ele gerou. |
-| 8 | 1:14–1:38 | Justificativa do alerta | Cada alerta mostra a janela de tempo, separa risco e confiança, apresenta as evidências e as limitações, e explica como a confiança é calculada e quando ela cai. O alerta apoia a análise, mas não decide: uma pessoa encaminha e assume a decisão. Nada acontece automaticamente. |
-| 9 | 1:39–1:46 | Mapa territorial | No mapa, cada região mostra o nível de risco com texto e ícone, não só com cor. |
-| 10 | 1:46–2:01 | Registro de ocorrência | O cidadão registra uma ocorrência em quatro etapas, com validação. Se digitar um telefone, o app avisa e remove o dado antes de salvar. Sem internet, o registro espera na fila. |
-| 11 | 2:01–2:14 | Limiares do gestor | O gestor define os limiares de alerta. Um valor inválido é recusado com uma mensagem clara. Com cinquenta e cinco por cento, os alertas são recalculados na hora. |
-| 12 | 2:14–2:28 | Novo alerta de previsão | O novo alerta aparece em todas as telas: previsão de cinquenta e quatro e meio por cento, com sessenta e cinco por cento de chance de ficar abaixo do limiar, e os fatores do modelo. |
-| 13 | 2:28–2:34 | Acessibilidade | Alto contraste e texto em duzentos por cento, sem quebrar a tela. |
-| 14 | 2:34–2:40 | Encerramento | No histórico real, o PULSO avisou as seis pioras de faixa com quase seis dias de antecedência. |
+| 1 | 0:00–0:05 | Abertura | Este é o PULSO, um radar que antecipa a crise hídrica do Sistema Cantareira. |
+| 2 | 0:05–0:12 | Consentimento | Tudo começa pelo consentimento: o app explica o que guarda e nunca pede nome, CPF ou endereço. |
+| 3 | 0:12–0:27 | Visão geral | Na visão geral, a gente vê o volume do Cantareira com dados reais da Sabesp: cinquenta e dois vírgula nove por cento, na faixa de atenção. E o gráfico traz a previsão para os próximos sete dias, com a margem de erro. |
+| 4 | 0:27–0:42 | Dashboard Água | No painel da água, dá para acompanhar o volume dos últimos noventa dias sobre as faixas da ANA, com a tendência, o mínimo e o máximo. Logo abaixo, cada mês aparece comparado com o mesmo mês do ano passado. |
+| 5 | 0:42–0:53 | Dashboard Clima | No painel do clima, a chuva da bacia aparece por semana e por mês, junto com a previsão do tempo, que fica salva para funcionar sem internet. |
+| 6 | 0:53–1:03 | Dashboard Risco territorial | Já o risco territorial mostra os registros de falta de água por região. Esses dados são sintéticos, e o próprio app deixa isso claro. |
+| 7 | 1:03–1:14 | Detalhe do indicador | Tocando em um indicador, o app explica o que ele mede, a unidade, de onde vem o dado e quais são as limitações, além dos alertas que ele gerou. |
+| 8 | 1:14–1:38 | Justificativa do alerta | E aqui está o coração do PULSO. Cada alerta mostra a janela de tempo, separa o risco da confiança e apresenta as evidências e as limitações. Ele também explica como a confiança é calculada e quando ela cai. E o mais importante: o alerta apoia a análise, mas não decide. Quem encaminha e assume a decisão é sempre uma pessoa. |
+| 9 | 1:39–1:46 | Mapa territorial | No mapa, cada região mostra o nível de risco com texto e ícone, e não só com cor. |
+| 10 | 1:46–2:01 | Registro de ocorrência | Qualquer morador pode registrar uma ocorrência em quatro etapas. Se ele digitar um telefone, o app avisa e remove o dado antes de salvar. E, se estiver sem internet, o registro fica na fila e é enviado depois. |
+| 11 | 2:01–2:14 | Limiares do gestor | O gestor também pode ajustar os limiares de alerta. Um valor inválido é recusado com uma mensagem clara e, ao definir cinquenta e cinco por cento, os alertas são recalculados na hora. |
+| 12 | 2:14–2:28 | Novo alerta de previsão | Com isso, surge um novo alerta em todas as telas: a previsão é de cinquenta e quatro e meio por cento, com sessenta e cinco por cento de chance de ficar abaixo do limiar. |
+| 13 | 2:28–2:34 | Acessibilidade | Tudo isso funciona em alto contraste e com o texto em duzentos por cento. |
+| 14 | 2:34–2:40 | Encerramento | No histórico real, o PULSO avisou as seis pioras com quase seis dias de antecedência. |
 
 Os números estão por extenso de propósito, para a leitura soar natural.
